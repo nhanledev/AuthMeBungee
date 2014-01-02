@@ -1,0 +1,4 @@
+name: BungeeAuthMeBridge
+main: com.crylegend.bungeeauthmebridge.BungeeAuthMeBridge
+version: 1.0
+author: CryLegend

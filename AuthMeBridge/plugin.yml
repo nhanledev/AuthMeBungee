@@ -1,0 +1,15 @@
+name: AuthMeBridge
+main: com.crylegend.authmebridge.AuthMeBridge
+version: 1.0
+website: http://www.craftfriends.fr
+author: CryLegend
+description: Plugin de bridge avec BungeeCord
+depends: [AuthMe]
+commands:
+  testbridge:
+    description: Commande de test des channels
+    usage: /testbridge
+permissions:
+    authmebridge.testbridge:
+        description: Donne accès à la commande de test
+        default: op
