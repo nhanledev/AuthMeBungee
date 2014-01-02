@@ -19,10 +19,11 @@ import fr.xephi.authme.api.API;
 import fr.xephi.authme.cache.auth.PlayerCache;
 
 public class AuthMeBridge extends JavaPlugin {
-	Logger log = Logger.getLogger("Minecraft");
+    Logger log = Logger.getLogger("Minecraft");
 	String prefix = "[AuthMeBridge] ";
 	AuthMeBridgeListener listener;
 	AuthMe authMePlugin;
+	String server;
 	
 	public void onEnable() {
 		log.info(prefix + "Hello world");
@@ -33,6 +34,8 @@ public class AuthMeBridge extends JavaPlugin {
 		}
 		getServer().getPluginManager().registerEvents(new AuthMeBridgeListener(this), this);
 	    getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+	    server = getConfig().getString("server");
+	    saveDefaultConfig();
         /*getServer().getMessenger().registerIncomingPluginChannel(this, "AuthMeBridge", new PluginMessageListener() {
         	@Override
             public void onPluginMessageReceived(String channel, Player player, byte[] message) {
@@ -81,6 +84,7 @@ public class AuthMeBridge extends JavaPlugin {
 		try {
 			out.writeUTF("loggedInPlayersList");
 			out.writeUTF(getAuthenticatedPlayers());
+			getServer().broadcastMessage(getAuthenticatedPlayers());
 			
 			Player p = getServer().getOnlinePlayers()[0];
 
@@ -93,13 +97,12 @@ public class AuthMeBridge extends JavaPlugin {
 
 	private String getAuthenticatedPlayers() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(server);
 		for (Player player: getServer().getOnlinePlayers()) {
 			if (API.isAuthenticated(player))
 					sb.append(", " + player.getName());
 		}
-		if (sb.toString().length() < 3)
-			return ":empty:";
-		return sb.substring(2);
+		return sb.toString();
 	}
 
 }
