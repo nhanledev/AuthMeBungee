@@ -1,6 +1,9 @@
 package com.crylegend.bungeeauthmebridge;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
@@ -13,7 +16,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 public class BungeeAuthMeBridgeListener implements Listener{
-	BungeeAuthMeBridge plugin;
+    BungeeAuthMeBridge plugin;
 	
 	public BungeeAuthMeBridgeListener(BungeeAuthMeBridge plugin) {
 		this.plugin = plugin;
@@ -29,7 +32,10 @@ public class BungeeAuthMeBridgeListener implements Listener{
 	    ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 	    String subchannel = in.readUTF();
 	    if (subchannel.equals("loggedInPlayersList")) {
-	    	plugin.authList = Arrays.asList(in.readUTF().split(", "));
+	    	String[] array = in.readUTF().split(", ");
+	    	LinkedList<String> list = new LinkedList<String>(Arrays.asList(array));
+	    	list.remove(array[0]);
+	    	plugin.authList.put(array[0], list);
 	   }
 	}
 	
@@ -42,7 +48,9 @@ public class BungeeAuthMeBridgeListener implements Listener{
         if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha"))
             return;
 	    ProxiedPlayer player = (ProxiedPlayer)event.getSender();
-		if (!plugin.authList.contains(player.getName()))
+		if (!plugin.authList.containsKey("lobby") || plugin.authList.get("lobby").isEmpty() || !plugin.authList
+				.get(player.getServer().getInfo().getName())
+				.contains(player.getName()))
 			event.setCancelled(true);
 	}
 }
