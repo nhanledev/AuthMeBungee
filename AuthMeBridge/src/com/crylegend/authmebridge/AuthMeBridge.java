@@ -36,27 +36,6 @@ public class AuthMeBridge extends JavaPlugin {
 	    getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 	    server = getConfig().getString("server");
 	    saveDefaultConfig();
-        /*getServer().getMessenger().registerIncomingPluginChannel(this, "AuthMeBridge", new PluginMessageListener() {
-        	@Override
-            public void onPluginMessageReceived(String channel, Player player, byte[] message) {
-        	getServer().broadcastMessage("Hey");
-            if (!channel.equals("BungeeCord")) {
-                return;
-            }
-            getServer().broadcastMessage("Hey");
-     
-            DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
-            String subchannel = null;
-    		try {
-    			subchannel = in.readUTF();
-    	        if (subchannel.equals("hasPermission")) {
-    	        	getServer().getPlayer("CryLegend").sendMessage("Hey:" + in.readUTF());
-    	        }
-    		} catch (IOException e) {
-    			log.info(prefix + "Erreur IOException: " + e.getMessage());
-    		}
-        }
-        });*/
         
 	}
 	
@@ -84,7 +63,6 @@ public class AuthMeBridge extends JavaPlugin {
 		try {
 			out.writeUTF("loggedInPlayersList");
 			out.writeUTF(getAuthenticatedPlayers());
-			getServer().broadcastMessage(getAuthenticatedPlayers());
 			
 			Player p = getServer().getOnlinePlayers()[0];
 
