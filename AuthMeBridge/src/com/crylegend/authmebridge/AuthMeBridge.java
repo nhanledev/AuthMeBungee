@@ -1,86 +1,68 @@
 package com.crylegend.authmebridge;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.logging.Logger;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.messaging.PluginMessageListener;
-
 import fr.xephi.authme.AuthMe;
 import fr.xephi.authme.api.API;
-import fr.xephi.authme.cache.auth.PlayerCache;
 
 public class AuthMeBridge extends JavaPlugin {
-    Logger log = Logger.getLogger("Minecraft");
+	Logger log = Logger.getLogger("Minecraft");
 	String prefix = "[AuthMeBridge] ";
-	AuthMeBridgeListener listener;
-	AuthMe authMePlugin;
-	String server;
-	
+	String incomingChannel = "BAuthMeBridge";
+	String outcomingChannel = "AuthMeBridge";
+
 	public void onEnable() {
 		log.info(prefix + "Hello world");
-		authMePlugin = API.hookAuthMe();
-		if (authMePlugin == null) {
-			log.info(prefix + "Cannot hook into AuthMe, disabling");
+		if (!getServer().getPluginManager().isPluginEnabled("AuthMe")) {
+			log.info(prefix + "AuthMe not found, disabling");
 			getServer().getPluginManager().disablePlugin(this);
 		}
 		getServer().getPluginManager().registerEvents(new AuthMeBridgeListener(this), this);
-	    getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-	    server = getConfig().getString("server");
-	    saveDefaultConfig();
-        
+		getServer().getMessenger().registerOutgoingPluginChannel(this, outcomingChannel);
+
 	}
-	
+
 	public void onDisable() {
 		log.info(prefix + "Goodbye world");
 	}
-	
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		if (commandLabel.equalsIgnoreCase("testbridge")) {
-			if (!sender.hasPermission("authmebridge.testbridge")) {
-				sender.sendMessage(ChatColor.DARK_RED
-						+ "Permission refus\u00e9e.");
-				return true;
-			}
-			sendData();
-			return true;
-		}
-		return false;
-	}
 
-	public void sendData() {
-		ByteArrayOutputStream b = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(b);
-
-		try {
-			out.writeUTF("loggedInPlayersList");
-			out.writeUTF(getAuthenticatedPlayers());
-			
-			Player p = getServer().getOnlinePlayers()[0];
-
-			p.sendPluginMessage(this, "BungeeCord", b.toByteArray());
-		} catch (IOException e) {
-			log.info(prefix + "Erreur IOException: " + e.getMessage());
-		}
-		
-	}
-
-	private String getAuthenticatedPlayers() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(server);
+	/*public String getAuthenticatedPlayers() {
+		List<String> list = new ArrayList<String>();
 		for (Player player: getServer().getOnlinePlayers()) {
 			if (API.isAuthenticated(player))
-					sb.append(", " + player.getName());
+				list.add(player.getName());
 		}
-		return sb.toString();
+		return StringUtils.join(list, ", ");
 	}
+
+	@Override
+	public void onPluginMessageReceived(String channel, final Player player, byte[] message) {
+		if (!channel.equals("BAuthMeBridge"))
+			return;
+		ByteArrayDataInput in = ByteStreams.newDataInput(message);
+		String subchannel = in.readUTF();
+		if (subchannel.equals("AuthList")) {
+			ByteArrayOutputStream b = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(b);
+			try {
+				out.writeUTF("AuthList");
+				out.writeUTF(getAuthenticatedPlayers());
+				final byte[] byteArray = b.toByteArray();
+				getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
+					public void run(){
+						sendPluginMessage(player, byteArray);
+						}
+					}
+				);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void sendPluginMessage(Player player, byte[] byteArray) {
+		player.sendPluginMessage(this, outcomingChannel, byteArray);
+	}*/
 
 }

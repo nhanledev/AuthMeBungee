@@ -1,9 +1,12 @@
 package com.crylegend.authmebridge;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.xephi.authme.events.LoginEvent;
 
@@ -15,18 +18,19 @@ public class AuthMeBridgeListener implements Listener{
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		plugin.sendData();
-	}
-
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		plugin.sendData();
-	}
-
-	@EventHandler
-	public void onLogin(LoginEvent event) {
-		plugin.sendData();
+	public void onAuthMeLogin(LoginEvent event) {
+		if (!event.isLogin())
+			return;
+		final Player player = event.getPlayer();
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(b);
+		try {
+			out.writeUTF("PlayerLogin");
+			out.writeUTF(player.getUniqueId().toString());
+			new PluginMessageTask(plugin, player, b).runTaskAsynchronously(plugin);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

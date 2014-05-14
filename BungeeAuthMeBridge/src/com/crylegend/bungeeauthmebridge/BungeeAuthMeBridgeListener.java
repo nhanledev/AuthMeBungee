@@ -1,56 +1,125 @@
 package com.crylegend.bungeeauthmebridge;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.LoginEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteStreams;
-
 public class BungeeAuthMeBridgeListener implements Listener{
-    BungeeAuthMeBridge plugin;
-	
+	BungeeAuthMeBridge plugin;
+
 	public BungeeAuthMeBridgeListener(BungeeAuthMeBridge plugin) {
 		this.plugin = plugin;
 	}
-	
-	@EventHandler
-	public void onPluginMessage(PluginMessageEvent event) {
-	    if (!event.getTag().equals("BungeeCord"))
-	    	return;
-	    if (!(event.getSender() instanceof Server))
-	    	return;
-	    event.setCancelled(true);
-	    ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
-	    String subchannel = in.readUTF();
-	    if (subchannel.equals("loggedInPlayersList")) {
-	    	String[] array = in.readUTF().split(", ");
-	    	LinkedList<String> list = new LinkedList<String>(Arrays.asList(array));
-	    	list.remove(array[0]);
-	    	plugin.authList.put(array[0], list);
-	   }
-	}
+
+	/*@EventHandler
+	public void onChat(ChatEvent event) {
+		if (!(event.getSender() instanceof ProxiedPlayer)) {
+			return;
+		}
+		String cmd = event.getMessage().split(" ")[0];
+		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha")) {
+			plugin.getProxy().getScheduler().schedule(plugin, new Runnable() {
+				public void run() {
+					plugin.updateList();
+				}
+			}, 50, TimeUnit.MILLISECONDS);
+			return;
+		}
+		ProxiedPlayer player = (ProxiedPlayer)event.getSender();
+		if (!plugin.authList.containsKey(player.getServer().getInfo().getName()))
+			return;
+		if (plugin.authList.get(player.getServer().getInfo().getName()).isEmpty() || !plugin.authList.get(player.getServer().getInfo().getName()).contains(player.getName()))
+			event.setCancelled(true);
+	}*/
 	
 	@EventHandler
 	public void onChat(ChatEvent event) {
-		if (!(event.getSender() instanceof ProxiedPlayer)) {
-	      return;
-	    }
+		if (!(event.getSender() instanceof ProxiedPlayer))
+			return;
 		String cmd = event.getMessage().split(" ")[0];
-        if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha"))
-            return;
-	    ProxiedPlayer player = (ProxiedPlayer)event.getSender();
-		if (!plugin.authList.containsKey("lobby") || plugin.authList.get("lobby").isEmpty() || !plugin.authList
-				.get(player.getServer().getInfo().getName())
-				.contains(player.getName()))
+		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha"))
+			return;
+		ProxiedPlayer player = (ProxiedPlayer)event.getSender();
+		String server = player.getServer().getInfo().getName();
+	    if (!plugin.authList.containsKey(server))
+	    	plugin.authList.put(server, new LinkedList<UUID>());
+		if (plugin.authList.get(server).isEmpty() || !plugin.authList.get(server).contains(player.getUniqueId()))
 			event.setCancelled(true);
 	}
+
+	@EventHandler
+	public void onPluginMessage(PluginMessageEvent event) throws IOException {
+		if (!event.getTag().equalsIgnoreCase(plugin.incomingChannel))
+			return;
+		if (!(event.getSender() instanceof Server))
+			return;
+		event.setCancelled(true);
+		String server = ((Server) event.getSender()).getInfo().getName();
+	    DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
+	    String task = in.readUTF();
+	    if (!task.equals("PlayerLogin"))
+	    	return;
+	    event.setCancelled(true);
+	    if (!plugin.authList.containsKey(server))
+	    	plugin.authList.put(server, new LinkedList<UUID>());
+	    UUID uuid = UUID.fromString(in.readUTF());
+	    plugin.authList.get(server).add(uuid);
+	}
+
+	@EventHandler
+	public void onLeave(PlayerDisconnectEvent event) {
+		UUID uuid = event.getPlayer().getUniqueId();
+		if (event.getPlayer().getServer() == null)
+			return;
+		String server = event.getPlayer().getServer().getInfo().getName();
+	    if (plugin.authList.containsKey(server))
+	    	if (plugin.authList.get(server).contains(uuid))
+	    		plugin.authList.get(server).remove(uuid);
+	}
+	
+	@EventHandler
+	public void onServerSwitch(ServerSwitchEvent event) {
+		if (!plugin.serverSwitchRequiresAuth)
+			return;
+		ProxiedPlayer player = event.getPlayer();
+	    for (LinkedList<UUID> list: plugin.authList.values())
+	    	if (list.contains(player.getUniqueId()))
+	    		return;
+	    if (player.getServer().getInfo().getName().equalsIgnoreCase(plugin.mainServer))
+	    	return;
+	    TextComponent kickReason = new TextComponent("Authentification requise.");
+	    kickReason.setColor(ChatColor.RED);
+	    player.disconnect(kickReason);
+	}
+
+
+	/*@EventHandler
+	public void onServerSwitch(ServerSwitchEvent event) {
+		plugin.updateList();
+	}
+
+	@EventHandler
+	public void onJoin(LoginEvent event) {
+		plugin.updateList();
+	}
+
+	@EventHandler
+	public void onLeave(PlayerDisconnectEvent event) {
+		plugin.updateList();
+	}*/
 }
