@@ -26,43 +26,4 @@ public class AuthMeBridge extends JavaPlugin {
 	public void onDisable() {
 		log.info(prefix + "Goodbye world");
 	}
-
-	/*public String getAuthenticatedPlayers() {
-		List<String> list = new ArrayList<String>();
-		for (Player player: getServer().getOnlinePlayers()) {
-			if (API.isAuthenticated(player))
-				list.add(player.getName());
-		}
-		return StringUtils.join(list, ", ");
-	}
-
-	@Override
-	public void onPluginMessageReceived(String channel, final Player player, byte[] message) {
-		if (!channel.equals("BAuthMeBridge"))
-			return;
-		ByteArrayDataInput in = ByteStreams.newDataInput(message);
-		String subchannel = in.readUTF();
-		if (subchannel.equals("AuthList")) {
-			ByteArrayOutputStream b = new ByteArrayOutputStream();
-			DataOutputStream out = new DataOutputStream(b);
-			try {
-				out.writeUTF("AuthList");
-				out.writeUTF(getAuthenticatedPlayers());
-				final byte[] byteArray = b.toByteArray();
-				getServer().getScheduler().runTaskAsynchronously(this, new Runnable(){
-					public void run(){
-						sendPluginMessage(player, byteArray);
-						}
-					}
-				);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void sendPluginMessage(Player player, byte[] byteArray) {
-		player.sendPluginMessage(this, outcomingChannel, byteArray);
-	}*/
-
 }

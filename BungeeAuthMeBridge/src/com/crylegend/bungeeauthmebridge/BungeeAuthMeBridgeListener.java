@@ -25,27 +25,6 @@ public class BungeeAuthMeBridgeListener implements Listener{
 	public BungeeAuthMeBridgeListener(BungeeAuthMeBridge plugin) {
 		this.plugin = plugin;
 	}
-
-	/*@EventHandler
-	public void onChat(ChatEvent event) {
-		if (!(event.getSender() instanceof ProxiedPlayer)) {
-			return;
-		}
-		String cmd = event.getMessage().split(" ")[0];
-		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha")) {
-			plugin.getProxy().getScheduler().schedule(plugin, new Runnable() {
-				public void run() {
-					plugin.updateList();
-				}
-			}, 50, TimeUnit.MILLISECONDS);
-			return;
-		}
-		ProxiedPlayer player = (ProxiedPlayer)event.getSender();
-		if (!plugin.authList.containsKey(player.getServer().getInfo().getName()))
-			return;
-		if (plugin.authList.get(player.getServer().getInfo().getName()).isEmpty() || !plugin.authList.get(player.getServer().getInfo().getName()).contains(player.getName()))
-			event.setCancelled(true);
-	}*/
 	
 	@EventHandler
 	public void onChat(ChatEvent event) {
@@ -106,20 +85,4 @@ public class BungeeAuthMeBridgeListener implements Listener{
 	    kickReason.setColor(ChatColor.RED);
 	    player.disconnect(kickReason);
 	}
-
-
-	/*@EventHandler
-	public void onServerSwitch(ServerSwitchEvent event) {
-		plugin.updateList();
-	}
-
-	@EventHandler
-	public void onJoin(LoginEvent event) {
-		plugin.updateList();
-	}
-
-	@EventHandler
-	public void onLeave(PlayerDisconnectEvent event) {
-		plugin.updateList();
-	}*/
 }
