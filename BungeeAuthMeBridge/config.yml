@@ -1,2 +1,9 @@
-mainServer: Survie
+# List of servers which required to be authenticated
+serversList:
+  - lobby
+# List of commands allowed to be perform without being authenticated
+commandsWhitelist:
+  - /glist
+# Kick all players who switch servers without being authenticated (plugin teleport)
+# Do not set this option to true unless you know what you're doing!
 serverSwitchRequiresAuth: false
