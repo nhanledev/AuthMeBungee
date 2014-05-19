@@ -3,13 +3,10 @@ package com.crylegend.authmebridge;
 import java.util.logging.Logger;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import fr.xephi.authme.AuthMe;
-import fr.xephi.authme.api.API;
 
 public class AuthMeBridge extends JavaPlugin {
 	Logger log = Logger.getLogger("Minecraft");
 	String prefix = "[AuthMeBridge] ";
-	String incomingChannel = "BAuthMeBridge";
 	String outcomingChannel = "AuthMeBridge";
 
 	public void onEnable() {
