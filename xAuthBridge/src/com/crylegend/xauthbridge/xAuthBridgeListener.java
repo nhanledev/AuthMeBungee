@@ -8,12 +8,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class xAuthBridgeListener implements Listener{
 	xAuthBridge plugin;
 	
 	public xAuthBridgeListener(xAuthBridge plugin) {
 		this.plugin = plugin;
+	}
+	
+	@EventHandler
+	public void onxAuthSession(PlayerJoinEvent event) {
+		final Player player = event.getPlayer();
+		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+			public void run() {
+				playerLogin(player);
+			}
+		}, 10L);
 	}
 
 	@EventHandler
@@ -26,19 +37,23 @@ public class xAuthBridgeListener implements Listener{
 		final Player player = event.getPlayer();
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			public void run() {
-				if (!plugin.xauth.getPlayerManager().getPlayer(player.getName()).isAuthenticated())
-					return;
-				ByteArrayOutputStream b = new ByteArrayOutputStream();
-				DataOutputStream out = new DataOutputStream(b);
-				try {
-					out.writeUTF("PlayerLogin");
-					out.writeUTF(player.getUniqueId().toString());
-					new PluginMessageTask(plugin, b).runTaskAsynchronously(plugin);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				playerLogin(player);
 			}
 		}, 10L);
+	}
+	
+	public void playerLogin(Player player) {
+		if (!plugin.xauth.getPlayerManager().getPlayer(player.getName()).isAuthenticated())
+			return;
+		ByteArrayOutputStream b = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(b);
+		try {
+			out.writeUTF("PlayerLogin");
+			out.writeUTF(player.getUniqueId().toString());
+			new PluginMessageTask(plugin, b).runTaskAsynchronously(plugin);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
