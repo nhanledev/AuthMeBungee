@@ -55,10 +55,20 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		if (!task.equals("PlayerLogin"))
 			return;
 		event.setCancelled(true);
+		UUID uuid = UUID.fromString(in.readUTF());
+		boolean online = false;
+		for (ProxiedPlayer player: plugin.getProxy().getPlayers()) {
+			if (player.getUniqueId().equals(uuid)) {
+				online = true;
+				break;
+			}
+		}
+		if (!online)
+			return;
 		if (!plugin.authList.containsKey(server))
 			plugin.authList.put(server, new LinkedList<UUID>());
-		UUID uuid = UUID.fromString(in.readUTF());
-		plugin.authList.get(server).add(uuid);
+		if (!plugin.authList.get(server).contains(uuid))
+			plugin.authList.get(server).add(uuid);
 	}
 
 	@EventHandler
