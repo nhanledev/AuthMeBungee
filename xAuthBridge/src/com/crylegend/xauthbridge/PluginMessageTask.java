@@ -2,19 +2,22 @@ package com.crylegend.xauthbridge;
 
 import java.io.ByteArrayOutputStream;
 
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PluginMessageTask extends BukkitRunnable {
 	private final xAuthBridge plugin;
+	private final Player player;
 	private final ByteArrayOutputStream bytes;
 
-	public PluginMessageTask(xAuthBridge plugin, ByteArrayOutputStream bytes)
+	public PluginMessageTask(xAuthBridge plugin, Player player, ByteArrayOutputStream bytes)
 	{
 		this.plugin = plugin;
+		this.player = player;
 		this.bytes = bytes;
 	}
 
 	public void run() {
-		org.bukkit.Bukkit.getOnlinePlayers()[0].sendPluginMessage(plugin, plugin.outcomingChannel, bytes.toByteArray());
+		player.sendPluginMessage(plugin, plugin.outcomingChannel, bytes.toByteArray());
 	}
 }
