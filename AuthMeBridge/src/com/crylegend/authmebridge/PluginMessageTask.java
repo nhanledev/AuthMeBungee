@@ -18,6 +18,6 @@ public class PluginMessageTask extends BukkitRunnable {
 	}
 
 	public void run() {
-		player.sendPluginMessage(plugin, plugin.outcomingChannel, bytes.toByteArray());
+		player.sendPluginMessage(plugin, plugin.outgoingChannel, bytes.toByteArray());
 	}
 }

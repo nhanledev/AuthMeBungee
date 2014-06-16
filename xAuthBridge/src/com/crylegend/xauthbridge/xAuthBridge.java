@@ -9,7 +9,7 @@ import de.luricos.bukkit.xAuth.xAuth;
 public class xAuthBridge extends JavaPlugin {
 	Logger log = Logger.getLogger("Minecraft");
 	String prefix = "[xAuthBridge] ";
-	String outcomingChannel = "AuthMeBridge";
+	String outgoingChannel = "AuthMeBridge";
 	xAuth xauth;
 
 	public void onEnable() {
@@ -20,7 +20,7 @@ public class xAuthBridge extends JavaPlugin {
 		}
 		xauth = (xAuth) getServer().getPluginManager().getPlugin("xAuth");
 		getServer().getPluginManager().registerEvents(new xAuthBridgeListener(this), this);
-		getServer().getMessenger().registerOutgoingPluginChannel(this, outcomingChannel);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, outgoingChannel);
 
 	}
 
