@@ -49,7 +49,7 @@ public class xAuthBridgeListener implements Listener{
 		DataOutputStream out = new DataOutputStream(b);
 		try {
 			out.writeUTF("PlayerLogin");
-			out.writeUTF(player.getUniqueId().toString());
+			out.writeUTF(player.getName());
 			new PluginMessageTask(plugin, player, b).runTaskAsynchronously(plugin);
 		} catch (IOException e) {
 			e.printStackTrace();

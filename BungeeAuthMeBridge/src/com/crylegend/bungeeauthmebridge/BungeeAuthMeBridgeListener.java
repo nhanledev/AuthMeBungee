@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -37,7 +36,7 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		if (plugin.commandsWhitelist.contains(cmd))
 			return;
 		if (!plugin.authList.containsKey(server))
-			plugin.authList.put(server, new LinkedList<UUID>());
+			plugin.authList.put(server, new LinkedList<String>());
 		if (plugin.authList.get(server).isEmpty() || !plugin.authList.get(server).contains(player.getUniqueId()))
 			event.setCancelled(true);
 	}
@@ -55,10 +54,10 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		if (!task.equals("PlayerLogin"))
 			return;
 		event.setCancelled(true);
-		UUID uuid = UUID.fromString(in.readUTF());
+		String name = in.readUTF();
 		boolean online = false;
 		for (ProxiedPlayer player: plugin.getProxy().getPlayers()) {
-			if (player.getUniqueId().equals(uuid)) {
+			if (player.getName().equals(name)) {
 				online = true;
 				break;
 			}
@@ -66,42 +65,43 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		if (!online)
 			return;
 		if (!plugin.authList.containsKey(server))
-			plugin.authList.put(server, new LinkedList<UUID>());
-		if (!plugin.authList.get(server).contains(uuid))
-			plugin.authList.get(server).add(uuid);
+			plugin.authList.put(server, new LinkedList<String>());
+		if (!plugin.authList.get(server).contains(name))
+			plugin.authList.get(server).add(name);
 	}
 
 	@EventHandler
 	public void onLeave(PlayerDisconnectEvent event) {
-		UUID uuid = event.getPlayer().getUniqueId();
+		String name = event.getPlayer().getName();
 		if (event.getPlayer().getServer() == null) {
-			for (LinkedList<UUID> list: plugin.authList.values())
-				if (list.contains(uuid))
-					list.remove(uuid);
+			for (LinkedList<String> list: plugin.authList.values())
+				if (list.contains(name))
+					list.remove(name);
 		}
 		else {
 			String server = event.getPlayer().getServer().getInfo().getName();
 			if (plugin.authList.containsKey(server))
-				if (plugin.authList.get(server).contains(uuid))
-					plugin.authList.get(server).remove(uuid);
+				if (plugin.authList.get(server).contains(name))
+					plugin.authList.get(server).remove(name);
 		}
 	}
 
 	@EventHandler
 	public void onServerSwitch(ServerSwitchEvent event) {
-		UUID uuid = event.getPlayer().getUniqueId();
+		String name = event.getPlayer().getName();
 		String server = event.getPlayer().getServer().getInfo().getName();
 		if (plugin.authList.containsKey(server))
-			if (plugin.authList.get(server).contains(uuid))
-				plugin.authList.get(server).remove(uuid);
+			if (plugin.authList.get(server).contains(name))
+				plugin.authList.get(server).remove(name);
 		if (!plugin.serverSwitchRequiresAuth)
 			return;
 		ProxiedPlayer player = event.getPlayer();
-		for (LinkedList<UUID> list: plugin.authList.values())
-			if (list.contains(player.getUniqueId()))
+		for (String str: plugin.serversList)
+			if (server.equalsIgnoreCase(str))
 				return;
-		if (server.equalsIgnoreCase(player.getPendingConnection().getListener().getDefaultServer()))
-			return;
+		for (LinkedList<String> list: plugin.authList.values())
+			if (list.contains(player.getName()))
+				return;
 		TextComponent kickReason = new TextComponent("Authentication required.");
 		kickReason.setColor(ChatColor.RED);
 		player.disconnect(kickReason);
