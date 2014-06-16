@@ -37,7 +37,7 @@ public class BungeeAuthMeBridgeListener implements Listener{
 			return;
 		if (!plugin.authList.containsKey(server))
 			plugin.authList.put(server, new LinkedList<String>());
-		if (plugin.authList.get(server).isEmpty() || !plugin.authList.get(server).contains(player.getUniqueId()))
+		if (plugin.authList.get(server).isEmpty() || !plugin.authList.get(server).contains(player.getName()))
 			event.setCancelled(true);
 	}
 
