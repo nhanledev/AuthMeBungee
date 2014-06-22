@@ -55,14 +55,7 @@ public class BungeeAuthMeBridgeListener implements Listener{
 			return;
 		event.setCancelled(true);
 		String name = in.readUTF();
-		boolean online = false;
-		for (ProxiedPlayer player: plugin.getProxy().getPlayers()) {
-			if (player.getName().equals(name)) {
-				online = true;
-				break;
-			}
-		}
-		if (!online)
+		if (plugin.getProxy().getPlayer(name) == null)
 			return;
 		if (!plugin.authList.containsKey(server))
 			plugin.authList.put(server, new LinkedList<String>());
