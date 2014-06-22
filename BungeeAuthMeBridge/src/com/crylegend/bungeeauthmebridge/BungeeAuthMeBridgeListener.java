@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -14,6 +15,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.event.EventPriority;
 
 public class BungeeAuthMeBridgeListener implements Listener{
 	BungeeAuthMeBridge plugin;
@@ -22,8 +24,10 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		this.plugin = plugin;
 	}
 
-	@EventHandler
+	@EventHandler(priority=EventPriority.LOWEST)
 	public void onChat(ChatEvent event) {
+		if (event.isCancelled())
+			return;
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
 		String cmd = event.getMessage().split(" ")[0];
@@ -43,6 +47,8 @@ public class BungeeAuthMeBridgeListener implements Listener{
 
 	@EventHandler
 	public void onPluginMessage(PluginMessageEvent event) throws IOException {
+		if (event.isCancelled())
+			return;
 		if (!event.getTag().equalsIgnoreCase(plugin.incomingChannel))
 			return;
 		if (!(event.getSender() instanceof Server))
