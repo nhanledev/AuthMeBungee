@@ -1,6 +1,6 @@
 name: xAuthBridge
 main: com.crylegend.xauthbridge.xAuthBridge
-version: 1.2.2
+version: 1.3
 website: http://www.craftfriends.fr
 author: CryLegend
 description: Plugin de bridge avec BungeeCord
