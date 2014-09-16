@@ -30,6 +30,14 @@ public class BungeeAuthMeBridgeListener implements Listener{
 			return;
 		if (!(event.getSender() instanceof ProxiedPlayer))
 			return;
+		if (event.isCommand()) {
+			if (!plugin.commandsRequiresAuth)
+				return;
+		}
+		else {
+			if (!plugin.chatRequiresAuth)
+				return;
+		}
 		String cmd = event.getMessage().split(" ")[0];
 		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha"))
 			return;

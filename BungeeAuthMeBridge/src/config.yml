@@ -1,9 +1,13 @@
 # List of servers which required to be authenticated
 serversList:
   - lobby
+# Allows or not commands to be performed if user is not logged in
+commandsRequiresAuth: true
 # List of commands allowed to be perform without being authenticated
 commandsWhitelist:
   - /glist
-# Kick all players who switch servers without being authenticated (plugin teleport)
+# Allows or not user to talk in chat if he is not logged in
+chatRequiresAuth: true
+# Kick all players who switch servers without being authenticated (eg. plugin teleport)
 # Do not set this option to true unless you know what you're doing!
 serverSwitchRequiresAuth: false
