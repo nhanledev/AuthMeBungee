@@ -7,9 +7,10 @@ import java.io.IOException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
+import fr.xephi.authme.api.API;
 import fr.xephi.authme.events.LoginEvent;
-import fr.xephi.authme.events.SessionEvent;
 
 public class AuthMeBridgeListener implements Listener{
 	AuthMeBridge plugin;
@@ -24,15 +25,14 @@ public class AuthMeBridgeListener implements Listener{
 			return;
 		playerLogin(event.getPlayer());
 	}
-
+	
 	@EventHandler
-	public void onAuthMeSession(SessionEvent event) {
-		if (!event.isLogin())
-			return;
-		final Player player = plugin.getServer().getPlayerExact(event.getPlayerAuth().getNickname());
+	public void onAuthMeSession(PlayerJoinEvent event) {
+		final Player player = event.getPlayer();
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			public void run() {
-				playerLogin(player);
+				if (API.isAuthenticated(player))
+					playerLogin(player);
 			}
 		}, 10L);
 	}

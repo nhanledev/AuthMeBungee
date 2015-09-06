@@ -12,6 +12,7 @@ import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
+import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -39,7 +40,8 @@ public class BungeeAuthMeBridgeListener implements Listener{
 				return;
 		}
 		String cmd = event.getMessage().split(" ")[0];
-		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu") || cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha"))
+		if (cmd.equalsIgnoreCase("/login") || cmd.equalsIgnoreCase("/register") || cmd.equalsIgnoreCase("/passpartu")
+				|| cmd.equalsIgnoreCase("/l") || cmd.equalsIgnoreCase("/reg") || cmd.equalsIgnoreCase("/email") || cmd.equalsIgnoreCase("/captcha"))
 			return;
 		ProxiedPlayer player = (ProxiedPlayer)event.getSender();
 		String server = player.getServer().getInfo().getName();
@@ -112,5 +114,13 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		TextComponent kickReason = new TextComponent("Authentication required.");
 		kickReason.setColor(ChatColor.RED);
 		player.disconnect(kickReason);
+	}
+	
+	@EventHandler
+	public void onPlayerKick(ServerKickEvent event) {
+		if (event.isCancelled())
+			return;
+		if (event.getKickReason().equals("You logged in from another location"))
+			event.setCancelled(true);
 	}
 }
