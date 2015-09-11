@@ -1,7 +1,9 @@
 package com.crylegend.bungeeauthmebridge;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -99,23 +101,44 @@ public class BungeeAuthMeBridgeListener implements Listener{
 	public void onServerSwitch(ServerSwitchEvent event) {
 		String name = event.getPlayer().getName();
 		String server = event.getPlayer().getServer().getInfo().getName();
-		if (plugin.authList.containsKey(server))
+		/*if (plugin.authList.containsKey(server))
 			if (plugin.authList.get(server).contains(name))
-				plugin.authList.get(server).remove(name);
+				plugin.authList.get(server).remove(name);*/
+		ProxiedPlayer player = event.getPlayer();
+		for (LinkedList<String> list: plugin.authList.values())
+		{
+			if (list.contains(player.getName()))
+			{
+				try {
+					ByteArrayOutputStream b = new ByteArrayOutputStream();
+					DataOutputStream out = new DataOutputStream(b);
+
+					out.writeUTF("AutoLogin");
+
+					out.writeUTF(name);
+
+					plugin.getProxy().getScheduler().runAsync(plugin, new PluginMessageTask(plugin.outgoingChannel, event.getPlayer().getServer().getInfo(), b));
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				list.remove(player.getName());
+				
+				return;
+			}
+		}
 		if (!plugin.serverSwitchRequiresAuth)
 			return;
-		ProxiedPlayer player = event.getPlayer();
 		for (String str: plugin.serversList)
 			if (server.equalsIgnoreCase(str))
-				return;
-		for (LinkedList<String> list: plugin.authList.values())
-			if (list.contains(player.getName()))
 				return;
 		TextComponent kickReason = new TextComponent("Authentication required.");
 		kickReason.setColor(ChatColor.RED);
 		player.disconnect(kickReason);
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerKick(ServerKickEvent event) {
 		if (event.isCancelled())

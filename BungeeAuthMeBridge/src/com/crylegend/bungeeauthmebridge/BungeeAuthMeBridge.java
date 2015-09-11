@@ -18,6 +18,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeAuthMeBridge extends Plugin{
 	String incomingChannel = "AuthMeBridge";
+	String outgoingChannel = "BAuthMeBridge";
 	List<String> serversList;
 	List<String> commandsWhitelist;
 	HashMap<String,LinkedList<String>> authList = new HashMap<String,LinkedList<String>>();
@@ -51,6 +52,7 @@ public class BungeeAuthMeBridge extends Plugin{
 			e.printStackTrace();
 		}
 		getProxy().registerChannel(incomingChannel);
+		getProxy().registerChannel(outgoingChannel);
 		getProxy().getPluginManager().registerListener(this, new BungeeAuthMeBridgeListener(this));
 	}
 }
