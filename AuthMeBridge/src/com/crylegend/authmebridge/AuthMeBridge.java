@@ -17,17 +17,24 @@ public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 	String prefix = "[AuthMeBridge] ";
 	String incomingChannel = "BAuthMeBridge";
 	String outgoingChannel = "AuthMeBridge";
+	String autoLoginMessage = "§aYour session has been resumed by the bridge.";
 
 	public void onEnable() {
 		log.info(prefix + "Hello world");
+		
 		if (!getServer().getPluginManager().isPluginEnabled("AuthMe")) {
 			log.info(prefix + "AuthMe not found, disabling");
 			getServer().getPluginManager().disablePlugin(this);
 		}
+		
 		getServer().getPluginManager().registerEvents(new AuthMeBridgeListener(this), this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, incomingChannel, this);
 		getServer().getMessenger().registerOutgoingPluginChannel(this, outgoingChannel);
-
+		
+		autoLoginMessage = getConfig().getString("autoLoginMessage", autoLoginMessage);
+		getConfig().set("autoLoginMessage", autoLoginMessage);
+		
+		saveConfig();
 	}
 
 	public void onDisable() {
@@ -45,6 +52,8 @@ public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 
 				if (player != null) {
 					API.forceLogin(player);
+					if (!autoLoginMessage.isEmpty())
+						player.sendMessage(autoLoginMessage);
 				}
 			}
 		}
