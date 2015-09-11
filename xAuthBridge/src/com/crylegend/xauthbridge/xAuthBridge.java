@@ -11,7 +11,6 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 import de.luricos.bukkit.xAuth.xAuth;
-import de.luricos.bukkit.xAuth.xAuthPlayer.Status;
 
 public class xAuthBridge extends JavaPlugin implements PluginMessageListener {
 	Logger log = Logger.getLogger("Minecraft");
