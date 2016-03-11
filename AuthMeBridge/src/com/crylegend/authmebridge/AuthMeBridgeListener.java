@@ -20,7 +20,7 @@ public class AuthMeBridgeListener implements Listener{
 
 	@EventHandler
 	public void onAuthMeLogin(LoginEvent event) {
-		if (event.getPlayer() != null)
+		if (event.getPlayer() == null)
 			return;
 		playerLogin(event.getPlayer());
 	}
