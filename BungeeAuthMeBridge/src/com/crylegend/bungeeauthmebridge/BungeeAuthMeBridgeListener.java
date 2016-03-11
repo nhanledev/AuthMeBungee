@@ -109,22 +109,25 @@ public class BungeeAuthMeBridgeListener implements Listener{
 		{
 			if (list.contains(player.getName()))
 			{
-				try {
-					ByteArrayOutputStream b = new ByteArrayOutputStream();
-					DataOutputStream out = new DataOutputStream(b);
+				if (plugin.autoLogin)
+				{
+					try {
+						ByteArrayOutputStream b = new ByteArrayOutputStream();
+						DataOutputStream out = new DataOutputStream(b);
 
-					out.writeUTF("AutoLogin");
+						out.writeUTF("AutoLogin");
 
-					out.writeUTF(name);
+						out.writeUTF(name);
 
-					plugin.getProxy().getScheduler().runAsync(plugin, new PluginMessageTask(plugin.outgoingChannel, event.getPlayer().getServer().getInfo(), b));
+						plugin.getProxy().getScheduler().runAsync(plugin, new PluginMessageTask(plugin.outgoingChannel, event.getPlayer().getServer().getInfo(), b));
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				
+
 				list.remove(player.getName());
-				
+
 				return;
 			}
 		}

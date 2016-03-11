@@ -25,6 +25,7 @@ public class BungeeAuthMeBridge extends Plugin{
 	boolean commandsRequiresAuth = true;
 	boolean chatRequiresAuth = true;
 	boolean serverSwitchRequiresAuth = false;
+	boolean autoLogin = true;
 
 	public void onEnable() {
 		if (!getDataFolder().exists())
@@ -48,6 +49,7 @@ public class BungeeAuthMeBridge extends Plugin{
 			commandsRequiresAuth = configuration.getBoolean("commandsRequiresAuth", true);
 			chatRequiresAuth = configuration.getBoolean("chatRequiresAuth", true);
 			serverSwitchRequiresAuth = configuration.getBoolean("serverSwitchRequiresAuth", false);
+			autoLogin = configuration.getBoolean("autoLogin", true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
