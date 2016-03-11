@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import fr.xephi.authme.api.API;
 import fr.xephi.authme.events.LoginEvent;
 
 public class AuthMeBridgeListener implements Listener{
@@ -21,7 +20,7 @@ public class AuthMeBridgeListener implements Listener{
 
 	@EventHandler
 	public void onAuthMeLogin(LoginEvent event) {
-		if (!event.isLogin())
+		if (event.getPlayer() != null)
 			return;
 		playerLogin(event.getPlayer());
 	}
@@ -31,7 +30,7 @@ public class AuthMeBridgeListener implements Listener{
 		final Player player = event.getPlayer();
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			public void run() {
-				if (API.isAuthenticated(player))
+				if (fr.xephi.authme.api.NewAPI.getInstance().isAuthenticated(player))
 					playerLogin(player);
 			}
 		}, 10L);

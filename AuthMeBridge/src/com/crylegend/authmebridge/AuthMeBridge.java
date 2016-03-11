@@ -10,8 +10,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
-import fr.xephi.authme.api.API;
-
 public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 	Logger log = Logger.getLogger("Minecraft");
 	String prefix = "[AuthMeBridge] ";
@@ -51,7 +49,7 @@ public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 				Player player = Bukkit.getPlayer(in.readUTF());
 
 				if (player != null) {
-					API.forceLogin(player);
+					fr.xephi.authme.api.NewAPI.getInstance().forceLogin(player);
 					if (!autoLoginMessage.isEmpty())
 						player.sendMessage(autoLoginMessage);
 				}
