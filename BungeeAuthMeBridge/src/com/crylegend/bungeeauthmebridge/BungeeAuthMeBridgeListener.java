@@ -126,8 +126,6 @@ public class BungeeAuthMeBridgeListener implements Listener{
 					}
 				}
 
-				list.remove(player.getName());
-
 				return;
 			}
 		}
