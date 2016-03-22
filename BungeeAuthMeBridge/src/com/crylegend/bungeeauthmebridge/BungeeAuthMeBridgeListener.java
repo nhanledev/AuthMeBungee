@@ -84,17 +84,9 @@ public class BungeeAuthMeBridgeListener implements Listener{
 	@EventHandler
 	public void onLeave(PlayerDisconnectEvent event) {
 		String name = event.getPlayer().getName();
-		if (event.getPlayer().getServer() == null) {
-			for (LinkedList<String> list: plugin.authList.values())
-				if (list.contains(name))
-					list.remove(name);
-		}
-		else {
-			String server = event.getPlayer().getServer().getInfo().getName();
-			if (plugin.authList.containsKey(server))
-				if (plugin.authList.get(server).contains(name))
-					plugin.authList.get(server).remove(name);
-		}
+		for (LinkedList<String> list: plugin.authList.values())
+			if (list.contains(name))
+				list.remove(name);
 	}
 
 	@EventHandler
