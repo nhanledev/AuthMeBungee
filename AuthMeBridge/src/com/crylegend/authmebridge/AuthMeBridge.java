@@ -53,7 +53,7 @@ public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 						fr.xephi.authme.api.NewAPI.getInstance().forceLogin(player);
 						if (!autoLoginMessage.isEmpty())
 							player.sendMessage(autoLoginMessage);
-						}
+					}
 				}
 			}
 		}
