@@ -49,9 +49,11 @@ public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 				Player player = Bukkit.getPlayer(in.readUTF());
 
 				if (player != null) {
-					fr.xephi.authme.api.NewAPI.getInstance().forceLogin(player);
-					if (!autoLoginMessage.isEmpty())
-						player.sendMessage(autoLoginMessage);
+					if (!fr.xephi.authme.api.NewAPI.getInstance().isAuthenticated(player)) {
+						fr.xephi.authme.api.NewAPI.getInstance().forceLogin(player);
+						if (!autoLoginMessage.isEmpty())
+							player.sendMessage(autoLoginMessage);
+						}
 				}
 			}
 		}

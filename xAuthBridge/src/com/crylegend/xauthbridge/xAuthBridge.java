@@ -54,9 +54,11 @@ public class xAuthBridge extends JavaPlugin implements PluginMessageListener {
 				Player player = Bukkit.getPlayer(in.readUTF());
 
 				if (player != null) {
-					xauth.getPlayerManager().doLogin(xauth.getPlayerManager().getPlayer(player));
-					if (!autoLoginMessage.isEmpty())
-						player.sendMessage(autoLoginMessage);
+					if (!xauth.getPlayerManager().getPlayer(player.getName()).isAuthenticated()) {
+						xauth.getPlayerManager().doLogin(xauth.getPlayerManager().getPlayer(player));
+						if (!autoLoginMessage.isEmpty())
+							player.sendMessage(autoLoginMessage);
+					}
 				}
 			}
 		}
