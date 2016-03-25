@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   BungeeAuthMeBridge.java                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: CryLegend <crylegend95@gmail.com>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/25 18:30:49 by CryLegend         #+#    #+#             */
+/*   Updated: 2016/03/25 18:30:50 by CryLegend        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package com.crylegend.bungeeauthmebridge;
 
 import com.crylegend.bungeeauthmebridge.config.Settings;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PluginMessageTask.java                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: CryLegend <crylegend95@gmail.com>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/25 18:31:59 by CryLegend         #+#    #+#             */
+/*   Updated: 2016/03/25 18:32:00 by CryLegend        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package com.crylegend.bungeeauthmebridge.utils;
 
 import java.io.ByteArrayOutputStream;

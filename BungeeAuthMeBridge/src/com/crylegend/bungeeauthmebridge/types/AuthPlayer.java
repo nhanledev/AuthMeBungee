@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   AuthPlayer.java                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: CryLegend <crylegend95@gmail.com>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/25 18:31:50 by CryLegend         #+#    #+#             */
+/*   Updated: 2016/03/25 18:31:52 by CryLegend        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package com.crylegend.bungeeauthmebridge.types;
 
 import net.md_5.bungee.api.ProxyServer;

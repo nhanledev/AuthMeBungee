@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PlayerListener.java                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: CryLegend <crylegend95@gmail.com>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/25 18:31:32 by CryLegend         #+#    #+#             */
+/*   Updated: 2016/03/25 18:31:34 by CryLegend        ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 package com.crylegend.bungeeauthmebridge.listeners;
 
 import java.io.ByteArrayOutputStream;
