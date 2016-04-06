@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.crylegend</groupId>
+    <artifactId>authmebridge-parent</artifactId>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>AuthMeBridge</name>
+    <description>Bungeecord addon for AuthMe and xAuth!</description>
+    <inceptionYear>2014</inceptionYear>
+    <url>https://www.spigotmc.org/resources/authmebridge-for-bungeecord.574/</url>
+
+    <organization>
+        <name>AuthMe-Team</name>
+        <url>https://github.com/AuthMe-Team</url>
+    </organization>
+
+    <scm>
+        <connection>scm:git:https://github.com/AuthMe-Team/AuthMeBridge.git</connection>
+        <developerConnection>scm:git:git@github.com:Xephi/AuthMe-Team/AuthMeBridge.git</developerConnection>
+        <url>https://github.com/AuthMe-Team/AuthMeBridge.git</url>
+    </scm>
+
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://ci.xephi.fr/job/AuthMeBridge/</url>
+    </ciManagement>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/CryLegend/AuthMeBridge/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>The GNU General Public Licence version 3 (GPLv3)</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+    </licenses>
+
+    <prerequisites>
+        <maven>3.3.3</maven>
+    </prerequisites>
+
+    <properties>
+        <!-- Project Properties -->
+        <projectEncoding>UTF-8</projectEncoding>
+        <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
+        <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
+        <jdkVersion>1.7</jdkVersion>
+        <testJreVersion>1.7</testJreVersion>
+
+        <!-- Output properties -->
+        <buildNumber>Unknown</buildNumber>
+
+        <!-- Change Bukkit Version HERE! -->
+        <bukkitVersion>1.9-R0.1-SNAPSHOT</bukkitVersion>
+        <bungeeVersion>1.9-R0.1-SNAPSHOT</bungeeVersion>
+    </properties>
+
+    <!-- Jenkins profile (add the real buildNumber to the version string) -->
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <buildNumber>${env.BUILD_NUMBER}</buildNumber>
+            </properties>
+        </profile>
+    </profiles>
+
+    <modules>
+        <module>authmebridge-bungee</module>
+        <module>authmebridge-authme</module>
+        <module>authmebridge-xauth</module>
+    </modules>
+</project>

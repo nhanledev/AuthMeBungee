@@ -1,0 +1,14 @@
+machine:
+  java:
+    version: oraclejdk7
+general:
+  artifacts:
+    - "target/AuthMeBridge*.jar"
+test:
+  override:
+    - mvn clean install -B
+  post:
+    - cp ./target/AuthMeBridge*.jar $CIRCLE_ARTIFACTS
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/7b92ac1a1741748b26bf
