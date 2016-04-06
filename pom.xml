@@ -7,7 +7,7 @@
     <groupId>com.crylegend</groupId>
     <artifactId>authmebridge-parent</artifactId>
     <version>2.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>AuthMeBridge</name>
     <description>Bungeecord addon for AuthMe and xAuth!</description>
@@ -52,7 +52,6 @@
         <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
         <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
         <jdkVersion>1.7</jdkVersion>
-        <testJreVersion>1.7</testJreVersion>
 
         <!-- Output properties -->
         <buildNumber>Unknown</buildNumber>
@@ -82,4 +81,19 @@
         <module>authmebridge-authme</module>
         <module>authmebridge-xauth</module>
     </modules>
+
+    <build>
+        <plugins>
+            <!-- Maven Java Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${jdkVersion}</source>
+                    <target>${jdkVersion}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
