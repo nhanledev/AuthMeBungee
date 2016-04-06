@@ -17,7 +17,6 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import com.crylegend.bungeeauthmebridge.BridgeAPI;
-import com.crylegend.bungeeauthmebridge.BungeeAuthMeBridge;
 import com.crylegend.bungeeauthmebridge.Constants;
 import com.crylegend.bungeeauthmebridge.types.AuthPlayer;
 

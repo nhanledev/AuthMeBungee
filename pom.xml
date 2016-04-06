@@ -53,28 +53,9 @@
         <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
         <jdkVersion>1.7</jdkVersion>
 
-        <!-- Output properties -->
-        <buildNumber>Unknown</buildNumber>
-
-        <!-- Change Bukkit Version HERE! -->
         <bukkitVersion>1.9-R0.1-SNAPSHOT</bukkitVersion>
-        <bungeeVersion>1.9-R0.1-SNAPSHOT</bungeeVersion>
+        <bungeeVersion>1.9-SNAPSHOT</bungeeVersion>
     </properties>
-
-    <!-- Jenkins profile (add the real buildNumber to the version string) -->
-    <profiles>
-        <profile>
-            <id>jenkins</id>
-            <activation>
-                <property>
-                    <name>env.BUILD_NUMBER</name>
-                </property>
-            </activation>
-            <properties>
-                <buildNumber>${env.BUILD_NUMBER}</buildNumber>
-            </properties>
-        </profile>
-    </profiles>
 
     <modules>
         <module>authmebridge-bungee</module>

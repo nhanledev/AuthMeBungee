@@ -3,6 +3,7 @@ package com.crylegend.xauthbridge;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -17,7 +18,7 @@ public class xAuthBridge extends JavaPlugin implements PluginMessageListener {
 	String prefix = "[xAuthBridge] ";
 	String incomingChannel = "BAuthMeBridge";
 	String outgoingChannel = "AuthMeBridge";
-	String autoLoginMessage = "§aYour session has been resumed by the bridge.";
+	String autoLoginMessage = ChatColor.GREEN + "Your session has been resumed by the bridge.";
 	xAuth xauth;
 
 	public void onEnable() {

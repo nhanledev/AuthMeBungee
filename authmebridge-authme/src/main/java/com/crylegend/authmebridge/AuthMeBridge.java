@@ -3,6 +3,7 @@ package com.crylegend.authmebridge;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -15,7 +16,7 @@ public class AuthMeBridge extends JavaPlugin implements PluginMessageListener {
 	String prefix = "[AuthMeBridge] ";
 	String incomingChannel = "BAuthMeBridge";
 	String outgoingChannel = "AuthMeBridge";
-	String autoLoginMessage = "§aYour session has been resumed by the bridge.";
+	String autoLoginMessage = ChatColor.GREEN + "Your session has been resumed by the bridge.";
 
 	public void onEnable() {
 		log.info(prefix + "Hello world");

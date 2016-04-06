@@ -1,4 +1,4 @@
-name: BungeeAuthMeBridge
+name: ${project.name}
 main: com.crylegend.bungeeauthmebridge.BungeeAuthMeBridge
-version: 1.6
+version: ${project.version}
 author: CryLegend
