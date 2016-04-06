@@ -13,7 +13,7 @@
 
     <artifactId>authmebridge-xauth</artifactId>
     <packaging>jar</packaging>
-    <name>AuthMeBridge-xauth</name>
+    <name>AuthMeBridge-xAuth</name>
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
