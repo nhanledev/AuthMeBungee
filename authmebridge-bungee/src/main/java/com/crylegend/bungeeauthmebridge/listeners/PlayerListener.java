@@ -83,6 +83,10 @@ public class PlayerListener implements Listener {
 	public void onServerSwitch(ServerSwitchEvent event) {
 		AuthPlayer player = BridgeAPI.getPlayersManager().getPlayer(event.getPlayer());
 		
+		// Check if player exists (causing NPE, maybe the event is fired on player disconnect?)
+		if (player == null)
+			return;
+		
 		// Player is trying to switch server (also called on first server player connection)
 		if (player.isLoggedIn()) {
 			// If player is logged in and autoLogin is enabled, send login signal to the bukkit side
