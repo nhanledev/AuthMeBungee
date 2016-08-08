@@ -54,7 +54,9 @@
     <modules>
         <module>authmebridge-bungee</module>
         <module>authmebridge-authme</module>
+        <!--
         <module>authmebridge-xauth</module>
+        -->
     </modules>
 
     <build>

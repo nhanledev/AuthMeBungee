@@ -22,15 +22,15 @@ import net.md_5.bungee.api.config.ServerInfo;
  * Plugin message task - used to send plugin messages to bukkit-side
  */
 public class PluginMessageTask implements Runnable {
-	private final ByteArrayOutputStream bytes;
-	private final ServerInfo server;
+    private final ByteArrayOutputStream bytes;
+    private final ServerInfo server;
 
-	public PluginMessageTask(ServerInfo server, ByteArrayOutputStream bytes) {
-		this.bytes = bytes;
-		this.server = server;
-	}
+    public PluginMessageTask(ServerInfo server, ByteArrayOutputStream bytes) {
+        this.bytes = bytes;
+        this.server = server;
+    }
 
-	public void run() {
-		server.sendData(Constants.outgoingChannel, bytes.toByteArray());
-	}
+    public void run() {
+        server.sendData(Constants.outgoingChannel, bytes.toByteArray());
+    }
 }

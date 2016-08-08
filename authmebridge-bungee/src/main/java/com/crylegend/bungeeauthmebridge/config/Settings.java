@@ -30,6 +30,7 @@ public final class Settings {
     public static boolean commandsRequiresAuth = true;
     public static boolean chatRequiresAuth = true;
     public static boolean serverSwitchRequiresAuth = false;
+    public static String requiresAuthKickMessage = "Authentication required.";
     public static boolean autoLogin = true;
     private Configuration config;
 
@@ -40,9 +41,8 @@ public final class Settings {
             this.configFile.loadConfig();
             this.config = configFile.getConfig();
             loadConfigOptions();
-        }
-        catch (Exception ex) {
-        	ex.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -50,12 +50,13 @@ public final class Settings {
         if (configFile == null) {
             return;
         }
-        
+
         commandsWhitelist = config.getStringList("commandsWhitelist");
         serversList = config.getStringList("serversList");
         commandsRequiresAuth = config.getBoolean("commandsRequiresAuth", true);
         chatRequiresAuth = config.getBoolean("chatRequiresAuth", true);
         serverSwitchRequiresAuth = config.getBoolean("serverSwitchRequiresAuth", false);
+        requiresAuthKickMessage = config.getString("serverSwitchKickMessage", "Authentication required.");
         autoLogin = config.getBoolean("autoLogin", true);
     }
 }

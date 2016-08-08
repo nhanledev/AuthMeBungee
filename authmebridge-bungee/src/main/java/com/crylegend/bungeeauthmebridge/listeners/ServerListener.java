@@ -30,41 +30,41 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class ServerListener implements Listener {
 
-	@EventHandler
-	public void onPluginMessage(PluginMessageEvent event) {
-		if (event.isCancelled())
-			return;
+    @EventHandler
+    public void onPluginMessage(PluginMessageEvent event) {
+        if (event.isCancelled())
+            return;
 
-		// Check if the message is for us
-		if (!event.getTag().equalsIgnoreCase(Constants.incomingChannel))
-			return;
-		
-		// Check if a player is not trying to rip us off sending a fake message
-		if (!(event.getSender() instanceof Server))
-			return;
-		
-		// Now that's sure, it's for us, so let's go
-		event.setCancelled(true);
-		
-		try {
-			// Read the plugin message
-			DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
-			
-			// For now that's the only type of message the server is able to receive
-			String task = in.readUTF();
-			if (!task.equals("PlayerLogin"))
-				return;
-			
-			// Gather informations from the plugin message
-			String name = in.readUTF();
-			AuthPlayer player = BridgeAPI.getPlayersManager().getPlayer(name);
-			
-			// Set the player status to logged in
-			player.setLoggedIn();
-		}
-		catch (IOException ex) {
-			// Something nasty happened
-			ex.printStackTrace();
-		}
-	}
+        // Check if the message is for us
+        if (!event.getTag().equalsIgnoreCase(Constants.incomingChannel))
+            return;
+
+        // Check if a player is not trying to rip us off sending a fake message
+        if (!(event.getSender() instanceof Server))
+            return;
+
+        // Now that's sure, it's for us, so let's go
+        event.setCancelled(true);
+
+        try {
+            // Read the plugin message
+            DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
+
+            // For now that's the only type of message the server is able to
+            // receive
+            String task = in.readUTF();
+            if (!task.equals("PlayerLogin"))
+                return;
+
+            // Gather informations from the plugin message
+            String name = in.readUTF();
+            AuthPlayer player = BridgeAPI.getPlayersManager().getPlayer(name);
+
+            // Set the player status to logged in
+            player.setLoggedIn();
+        } catch (IOException ex) {
+            // Something nasty happened
+            ex.printStackTrace();
+        }
+    }
 }

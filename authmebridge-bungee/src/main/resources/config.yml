@@ -11,5 +11,6 @@ chatRequiresAuth: true
 # Kick all players who switch servers without being authenticated (eg. plugin teleport)
 # Do not set this option to true unless you know what you're doing!
 serverSwitchRequiresAuth: false
+serverSwitchKickMessage: 'Authentication required.'
 # Enable session resume between servers (eg. autologin if you change server)
 autoLogin: true
