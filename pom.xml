@@ -6,7 +6,7 @@
 
     <groupId>com.crylegend</groupId>
     <artifactId>authmebridge-parent</artifactId>
-    <version>1.6.1</version>
+    <version>1.6.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>AuthMeBridge</name>
@@ -42,19 +42,13 @@
         </license>
     </licenses>
 
-    <prerequisites>
-        <maven>3.3.3</maven>
-    </prerequisites>
-
     <properties>
         <!-- Project Properties -->
-        <projectEncoding>UTF-8</projectEncoding>
-        <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
-        <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdkVersion>1.7</jdkVersion>
 
-        <bukkitVersion>1.9-R0.1-SNAPSHOT</bukkitVersion>
-        <bungeeVersion>1.9-SNAPSHOT</bungeeVersion>
+        <bukkitVersion>1.10.2-R0.1-SNAPSHOT</bukkitVersion>
+        <bungeeVersion>1.10-SNAPSHOT</bungeeVersion>
     </properties>
 
     <modules>

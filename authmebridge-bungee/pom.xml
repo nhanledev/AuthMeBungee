@@ -7,34 +7,26 @@
     <parent>
         <groupId>com.crylegend</groupId>
         <artifactId>authmebridge-parent</artifactId>
-        <version>${project.parent.version}</version>
+        <version>1.6.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>authmebridge-bungeecord</artifactId>
-    <packaging>jar</packaging>
     <name>BungeeAuthMeBridge</name>
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
-        <sourceDirectory>src/main/java</sourceDirectory>
-        <testSourceDirectory>src/test/java</testSourceDirectory>
 
         <resources>
             <resource>
-                <targetPath>.</targetPath>
                 <filtering>false</filtering>
-                <directory>../</directory>
+                <directory>.</directory>
                 <includes>
                     <include>LICENSE</include>
                 </includes>
             </resource>
             <resource>
-                <targetPath>.</targetPath>
                 <filtering>true</filtering>
                 <directory>src/main/resources/</directory>
-                <includes>
-                    <include>*</include>
-                </includes>
             </resource>
         </resources>
     </build>
@@ -54,7 +46,6 @@
             <artifactId>bungeecord-api</artifactId>
             <version>${bungeeVersion}</version>
             <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 </project>

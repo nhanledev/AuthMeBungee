@@ -52,7 +52,7 @@ public class xAuthBridge extends JavaPlugin implements PluginMessageListener {
 			String subchannel = in.readUTF();
 
 			if (subchannel.equals("AutoLogin")) {
-				Player player = Bukkit.getPlayer(in.readUTF());
+				Player player = Bukkit.getPlayerExact(in.readUTF());
 
 				if (player != null) {
 					if (!xauth.getPlayerManager().getPlayer(player.getName()).isAuthenticated()) {
