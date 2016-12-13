@@ -1,4 +1,0 @@
-name: ${project.name}
-main: com.crylegend.bungeeauthmebridge.BungeeAuthMeBridge
-version: ${project.version}
-author: CryLegend

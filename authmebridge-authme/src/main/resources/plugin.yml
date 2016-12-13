@@ -1,6 +1,0 @@
-name: ${project.name}
-main: com.crylegend.authmebridge.AuthMeBridge
-version: ${project.version}
-author: CryLegend
-description: The first AuthMe bungeecord addon
-depend: [AuthMe]

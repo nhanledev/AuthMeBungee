@@ -1,7 +1,0 @@
-name: ${project.name}
-main: com.crylegend.xauthbridge.xAuthBridge
-version: ${project.version}
-website: http://www.craftfriends.fr
-author: CryLegend
-description: The first xAuth bungeecord addon
-depend: [xAuth]

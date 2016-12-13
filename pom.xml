@@ -4,15 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.crylegend</groupId>
-    <artifactId>authmebridge-parent</artifactId>
+    <groupId>fr.xephi</groupId>
+    <artifactId>authmebungee-parent</artifactId>
     <version>1.6.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>AuthMeBridge</name>
-    <description>Bungeecord addon for AuthMe and xAuth!</description>
+    <name>AuthMeBungee</name>
+    <description>Bungeecord addon for AuthMe!</description>
     <inceptionYear>2014</inceptionYear>
-    <url>https://www.spigotmc.org/resources/authmebridge-for-bungeecord.574/</url>
 
     <organization>
         <name>AuthMe-Team</name>
@@ -20,19 +19,19 @@
     </organization>
 
     <scm>
-        <connection>scm:git:https://github.com/AuthMe-Team/AuthMeBridge.git</connection>
-        <developerConnection>scm:git:git@github.com:Xephi/AuthMe-Team/AuthMeBridge.git</developerConnection>
-        <url>https://github.com/AuthMe-Team/AuthMeBridge.git</url>
+        <connection>scm:git:https://github.com/AuthMe-Team/AuthMeBungee.git</connection>
+        <developerConnection>scm:git:git@github.com:Xephi/AuthMe-Team/AuthMeBungee.git</developerConnection>
+        <url>https://github.com/AuthMe-Team/AuthMeBungee.git</url>
     </scm>
 
     <ciManagement>
         <system>jenkins</system>
-        <url>http://ci.xephi.fr/job/AuthMeBridge/</url>
+        <url>http://ci.xephi.fr/job/AuthMeBungee/</url>
     </ciManagement>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/CryLegend/AuthMeBridge/issues</url>
+        <url>https://github.com/CryLegend/AuthMeBungee/issues</url>
     </issueManagement>
 
     <licenses>
@@ -45,18 +44,14 @@
     <properties>
         <!-- Project Properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdkVersion>1.7</jdkVersion>
 
-        <bukkitVersion>1.10.2-R0.1-SNAPSHOT</bukkitVersion>
-        <bungeeVersion>1.10-SNAPSHOT</bungeeVersion>
+        <bukkitVersion>1.11-R0.1-SNAPSHOT</bukkitVersion>
+        <bungeeVersion>1.11-SNAPSHOT</bungeeVersion>
     </properties>
 
     <modules>
-        <module>authmebridge-bungee</module>
-        <module>authmebridge-authme</module>
-        <!--
-        <module>authmebridge-xauth</module>
-        -->
+        <module>authmebungee-bungeecord</module>
+        <module>authmebungee-bukkit</module>
     </modules>
 
     <build>
@@ -65,11 +60,29 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
-                    <source>${jdkVersion}</source>
-                    <target>${jdkVersion}</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
+            </plugin>
+            <!-- Libs Shading and Relocation -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>shade</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
