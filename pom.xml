@@ -15,13 +15,13 @@
 
     <organization>
         <name>AuthMe-Team</name>
-        <url>https://github.com/AuthMe-Team</url>
+        <url>https://github.com/AuthMe</url>
     </organization>
 
     <scm>
-        <connection>scm:git:https://github.com/AuthMe-Team/AuthMeBungee.git</connection>
-        <developerConnection>scm:git:git@github.com:Xephi/AuthMe-Team/AuthMeBungee.git</developerConnection>
-        <url>https://github.com/AuthMe-Team/AuthMeBungee.git</url>
+        <connection>scm:git:https://github.com/AuthMe/AuthMeBungee.git</connection>
+        <developerConnection>scm:git:git@github.com:AuthMe/AuthMeBungee.git</developerConnection>
+        <url>https://github.com/AuthMe/AuthMeBungee.git</url>
     </scm>
 
     <ciManagement>
@@ -31,7 +31,7 @@
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/CryLegend/AuthMeBungee/issues</url>
+        <url>https://github.com/AuthMe/AuthMeBungee/issues</url>
     </issueManagement>
 
     <licenses>
