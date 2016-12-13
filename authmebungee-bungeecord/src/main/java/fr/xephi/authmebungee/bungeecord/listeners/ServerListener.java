@@ -49,14 +49,15 @@ public class ServerListener implements Listener {
 
             // For now that's the only type of message the server is able to receive
             String task = in.readUTF();
-            if (!task.equals("LOGIN:")) {
-                return;
-            }
 
-            // Gather informations from the plugin message
-            String name = in.readUTF();
-            // Set the player status to logged in
-            authPlayerManager.getAuthPlayer(name).setLogged(true);
+            switch (task) {
+                case "LOGIN:":
+                    authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(true);
+                    break;
+                case "LOGOUT:":
+                    authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(false);
+                    break;
+            }
         } catch (IOException ex) {
             // Something nasty happened
             ex.printStackTrace();

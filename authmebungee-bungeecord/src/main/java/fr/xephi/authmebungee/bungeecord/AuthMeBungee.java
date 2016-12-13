@@ -5,6 +5,7 @@ import ch.jalu.injector.InjectorBuilder;
 import fr.xephi.authmebungee.bungeecord.annotations.DataFolder;
 import fr.xephi.authmebungee.bungeecord.annotations.IncomingChannel;
 import fr.xephi.authmebungee.bungeecord.annotations.OutgoingChannel;
+import fr.xephi.authmebungee.bungeecord.commands.ReloadCommand;
 import fr.xephi.authmebungee.bungeecord.config.Settings;
 import fr.xephi.authmebungee.bungeecord.config.SettingsProvider;
 import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
@@ -42,6 +43,9 @@ public class AuthMeBungee extends Plugin {
         authPlayerManager = injector.getSingleton(AuthPlayerManager.class);
         pluginMessageSender = injector.getSingleton(PluginMessageSender.class);
 
+        // Register commands
+        getProxy().getPluginManager().registerCommand(this, new ReloadCommand());
+
         // Register plugin channels
         getProxy().registerChannel(INCOMING_CHANNEL);
         getProxy().registerChannel(OUTGOING_CHANNEL);
@@ -53,7 +57,7 @@ public class AuthMeBungee extends Plugin {
 
     private void setupInjector() {
         // Setup injector
-        injector = new InjectorBuilder().addDefaultHandlers("fr.xephi.authmebungee").create();
+        injector = new InjectorBuilder().addDefaultHandlers("fr.xephi.authmebungee.bungee").create();
         injector.register(AuthMeBungee.class, this);
         injector.register(ProxyServer.class, getProxy());
         injector.register(PluginManager.class, getProxy().getPluginManager());

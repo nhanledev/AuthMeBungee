@@ -4,6 +4,7 @@ import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import fr.xephi.authme.api.NewAPI;
 import fr.xephi.authme.events.LoginEvent;
+import fr.xephi.authme.events.LogoutEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,6 +58,30 @@ public class AuthMeBungee extends JavaPlugin implements Listener, PluginMessageL
 
         try {
             out.writeUTF("LOGIN:");
+            out.writeUTF(player.getName());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.sendPluginMessage(instance, OUTGOING_CHANNEL, bout.toByteArray());
+                }
+            }.runTaskAsynchronously(instance);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @EventHandler
+    public void onAuthMeLogout(LogoutEvent event) {
+        final Player player = event.getPlayer();
+        if (event.getPlayer() == null) {
+            return;
+        }
+
+        final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        DataOutputStream out = new DataOutputStream(bout);
+
+        try {
+            out.writeUTF("LOGOUT:");
             out.writeUTF(player.getName());
             new BukkitRunnable() {
                 @Override
