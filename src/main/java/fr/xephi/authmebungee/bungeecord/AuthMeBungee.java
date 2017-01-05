@@ -3,8 +3,6 @@ package fr.xephi.authmebungee.bungeecord;
 import ch.jalu.injector.Injector;
 import ch.jalu.injector.InjectorBuilder;
 import fr.xephi.authmebungee.bungeecord.annotations.DataFolder;
-import fr.xephi.authmebungee.bungeecord.annotations.IncomingChannel;
-import fr.xephi.authmebungee.bungeecord.annotations.OutgoingChannel;
 import fr.xephi.authmebungee.bungeecord.commands.ReloadCommand;
 import fr.xephi.authmebungee.bungeecord.config.Settings;
 import fr.xephi.authmebungee.bungeecord.config.SettingsProvider;
@@ -18,10 +16,6 @@ import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 public class AuthMeBungee extends Plugin {
-
-    // Constants
-    private final static String INCOMING_CHANNEL = "AuthMeBungee";
-    private final static String OUTGOING_CHANNEL = "AuthMeBungeeProxy";
 
     // Instances
     private Injector injector;
@@ -46,10 +40,6 @@ public class AuthMeBungee extends Plugin {
         // Register commands
         getProxy().getPluginManager().registerCommand(this, new ReloadCommand());
 
-        // Register plugin channels
-        getProxy().registerChannel(INCOMING_CHANNEL);
-        getProxy().registerChannel(OUTGOING_CHANNEL);
-
         // Registering event listeners
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(ServerListener.class));
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(PlayerListener.class));
@@ -62,8 +52,6 @@ public class AuthMeBungee extends Plugin {
         injector.register(ProxyServer.class, getProxy());
         injector.register(PluginManager.class, getProxy().getPluginManager());
         injector.register(TaskScheduler.class, getProxy().getScheduler());
-        injector.provide(IncomingChannel.class, INCOMING_CHANNEL);
-        injector.provide(OutgoingChannel.class, OUTGOING_CHANNEL);
         injector.provide(DataFolder.class, getDataFolder());
         injector.registerProvider(Settings.class, SettingsProvider.class);
     }

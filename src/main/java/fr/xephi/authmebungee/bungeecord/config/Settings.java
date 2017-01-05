@@ -1,8 +1,8 @@
 package fr.xephi.authmebungee.bungeecord.config;
 
-import com.github.authme.configme.SettingsManager;
-import com.github.authme.configme.migration.MigrationService;
-import com.github.authme.configme.resource.PropertyResource;
+import ch.jalu.configme.SettingsManager;
+import ch.jalu.configme.migration.MigrationService;
+import ch.jalu.configme.resource.PropertyResource;
 
 /**
  * The AuthMeBungee settings manager.

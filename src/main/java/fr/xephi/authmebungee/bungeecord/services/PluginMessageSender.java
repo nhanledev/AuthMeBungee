@@ -1,7 +1,6 @@
 package fr.xephi.authmebungee.bungeecord.services;
 
 import fr.xephi.authmebungee.bungeecord.AuthMeBungee;
-import fr.xephi.authmebungee.bungeecord.annotations.OutgoingChannel;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
@@ -9,10 +8,6 @@ import net.md_5.bungee.api.scheduler.TaskScheduler;
 import javax.inject.Inject;
 
 public class PluginMessageSender {
-
-    @Inject
-    @OutgoingChannel
-    private String outgoingChannel;
 
     @Inject
     private TaskScheduler scheduler;
@@ -47,7 +42,7 @@ public class PluginMessageSender {
 
         @Override
         public void run() {
-            server.sendData(outgoingChannel, bytes);
+            server.sendData("BungeeCord", bytes);
         }
     }
 }

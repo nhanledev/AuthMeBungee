@@ -1,8 +1,8 @@
 package fr.xephi.authmebungee.bungeecord.config;
 
-import com.github.authme.configme.migration.PlainMigrationService;
-import com.github.authme.configme.resource.PropertyResource;
-import com.github.authme.configme.resource.YamlFileResource;
+import ch.jalu.configme.migration.PlainMigrationService;
+import ch.jalu.configme.resource.PropertyResource;
+import ch.jalu.configme.resource.YamlFileResource;
 import fr.xephi.authmebungee.bungeecord.annotations.DataFolder;
 import fr.xephi.authmebungee.bungeecord.utils.FileUtils;
 

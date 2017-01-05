@@ -1,6 +1,5 @@
 package fr.xephi.authmebungee.bungeecord.listeners;
 
-import fr.xephi.authmebungee.bungeecord.annotations.IncomingChannel;
 import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
@@ -15,10 +14,6 @@ import java.io.IOException;
 public class ServerListener implements Listener {
 
     @Inject
-    @IncomingChannel
-    private String incomingChannel;
-
-    @Inject
     private AuthPlayerManager authPlayerManager;
 
     public ServerListener() {
@@ -31,7 +26,7 @@ public class ServerListener implements Listener {
         }
 
         // Check if the message is for us
-        if (!event.getTag().equals(incomingChannel)) {
+        if (!event.getTag().equals("BungeeCord")) {
             return;
         }
 
@@ -46,6 +41,10 @@ public class ServerListener implements Listener {
         try {
             // Read the plugin message
             DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
+
+            if(!in.readUTF().equals("AuthMeBungee")) {
+                return;
+            }
 
             // For now that's the only type of message the server is able to receive
             String task = in.readUTF();

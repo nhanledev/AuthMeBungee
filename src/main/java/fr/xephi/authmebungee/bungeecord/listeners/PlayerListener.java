@@ -114,7 +114,8 @@ public class PlayerListener implements Listener, SettingsDependent {
                     ByteArrayOutputStream bout = new ByteArrayOutputStream();
                     DataOutputStream out = new DataOutputStream(bout);
 
-                    out.writeUTF("AUTOLOGIN:");
+                    out.writeUTF("AuthMeBungee");
+                    out.writeUTF("AutoLogin");
                     out.writeUTF(authPlayer.getName());
 
                     // Not using async as bungeecord already use multiple threads for player connections

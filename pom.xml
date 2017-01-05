@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.xephi</groupId>
-    <artifactId>authmebungee-parent</artifactId>
-    <version>1.6.3-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <artifactId>authmebungee</artifactId>
+    <version>1.6.4-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>AuthMeBungee</name>
     <description>Bungeecord addon for AuthMe!</description>
@@ -44,17 +44,23 @@
     <properties>
         <!-- Project Properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <bukkitVersion>1.11-R0.1-SNAPSHOT</bukkitVersion>
         <bungeeVersion>1.11-SNAPSHOT</bungeeVersion>
     </properties>
 
-    <modules>
-        <module>authmebungee-bungeecord</module>
-        <module>authmebungee-bukkit</module>
-    </modules>
-
     <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>.</directory>
+                <includes>
+                    <include>LICENSE</include>
+                </includes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>../src/main/resources/</directory>
+            </resource>
+        </resources>
         <plugins>
             <!-- Maven Java Compiler -->
             <plugin>
@@ -86,4 +92,38 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <!-- Bungeecord Repo -->
+        <repository>
+            <id>oss-repo</id>
+            <url>http://oss.sonatype.org/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Dependency Injection -->
+        <dependency>
+            <groupId>ch.jalu</groupId>
+            <artifactId>injector</artifactId>
+            <version>0.3</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Configuration library -->
+        <dependency>
+            <groupId>ch.jalu</groupId>
+            <artifactId>configme</artifactId>
+            <version>0.3</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Bungeecord API, http://www.spigotmc.org/ -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>${bungeeVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

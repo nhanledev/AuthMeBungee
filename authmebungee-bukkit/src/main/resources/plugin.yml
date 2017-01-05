@@ -1,6 +1,0 @@
-name: ${project.name}
-description: The first AuthMe bungeecord addon
-version: ${project.version}
-main: fr.xephi.authmebungee.bukkit.AuthMeBungee
-authors: [CryLegend, AuthMeTeam]
-depend: [AuthMe]
