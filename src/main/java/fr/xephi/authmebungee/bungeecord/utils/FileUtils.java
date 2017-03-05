@@ -19,6 +19,7 @@ public final class FileUtils {
      */
     public static void create(File file) {
         try {
+		   file.getParentFile().mkdirs();
             boolean result = file.createNewFile();
             if (!result) {
                 throw new IllegalStateException("Could not create file '" + file + "'");
