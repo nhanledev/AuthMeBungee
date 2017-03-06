@@ -6,12 +6,12 @@
 
     <groupId>fr.xephi</groupId>
     <artifactId>authmebungee</artifactId>
-    <version>1.6.4-SNAPSHOT</version>
+    <version>1.6.5-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>AuthMeBungee</name>
     <description>Bungeecord addon for AuthMe!</description>
-    <inceptionYear>2014</inceptionYear>
+    <inceptionYear>2017</inceptionYear>
 
     <organization>
         <name>AuthMe-Team</name>
@@ -58,7 +58,7 @@
             </resource>
             <resource>
                 <filtering>true</filtering>
-                <directory>../src/main/resources/</directory>
+                <directory>src/main/resources</directory>
             </resource>
         </resources>
         <plugins>
