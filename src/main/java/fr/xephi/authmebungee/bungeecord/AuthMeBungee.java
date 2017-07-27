@@ -11,6 +11,7 @@ import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
 import fr.xephi.authmebungee.bungeecord.services.BungeeMessageSender;
 import fr.xephi.authmebungee.common.annotations.DataFolder;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
@@ -36,6 +37,10 @@ public class AuthMeBungee extends Plugin {
         settings = injector.getSingleton(SettingsManager.class);
         authPlayerManager = injector.getSingleton(AuthPlayerManager.class);
         pluginMessageSender = injector.getSingleton(BungeeMessageSender.class);
+
+        for(ProxiedPlayer player : getProxy().getPlayers()) {
+            authPlayerManager.addAuthPlayer(player);
+        }
 
         // Register commands
         getProxy().getPluginManager().registerCommand(this, new BungeeReloadCommand());
