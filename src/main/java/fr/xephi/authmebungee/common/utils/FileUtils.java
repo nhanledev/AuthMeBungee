@@ -1,4 +1,4 @@
-package fr.xephi.authmebungee.bungeecord.utils;
+package fr.xephi.authmebungee.common.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ public final class FileUtils {
      */
     public static void create(File file) {
         try {
-		   file.getParentFile().mkdirs();
+            file.getParentFile().mkdirs();
             boolean result = file.createNewFile();
             if (!result) {
                 throw new IllegalStateException("Could not create file '" + file + "'");

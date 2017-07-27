@@ -9,7 +9,10 @@ import java.util.List;
 import static ch.jalu.configme.properties.PropertyInitializer.newListProperty;
 import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
-public class ConfigProperties implements SettingsHolder {
+public class BungeeConfigProperties implements SettingsHolder {
+
+    private BungeeConfigProperties() {
+    }
 
     @Comment("List of servers which required to be authenticated")
     public static final Property<List<String>> AUTH_SERVERS =
@@ -36,7 +39,4 @@ public class ConfigProperties implements SettingsHolder {
     @Comment("Enable auto-login between servers")
     public static final Property<Boolean> AUTOLOGIN =
         newProperty("autoLogin", false);
-
-    private ConfigProperties() {
-    }
 }

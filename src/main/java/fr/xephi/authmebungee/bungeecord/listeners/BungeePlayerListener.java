@@ -1,11 +1,11 @@
 package fr.xephi.authmebungee.bungeecord.listeners;
 
-import fr.xephi.authmebungee.bungeecord.services.PluginMessageSender;
-import fr.xephi.authmebungee.bungeecord.config.ConfigProperties;
-import fr.xephi.authmebungee.bungeecord.config.Settings;
-import fr.xephi.authmebungee.bungeecord.config.SettingsDependent;
+import ch.jalu.configme.SettingsManager;
+import fr.xephi.authmebungee.bungeecord.config.BungeeConfigProperties;
 import fr.xephi.authmebungee.bungeecord.data.AuthPlayer;
 import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
+import fr.xephi.authmebungee.bungeecord.services.BungeeMessageSender;
+import fr.xephi.authmebungee.common.config.SettingsDependent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -23,11 +23,11 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PlayerListener implements Listener, SettingsDependent {
+public class BungeePlayerListener implements Listener, SettingsDependent {
 
     // Services
     private AuthPlayerManager authPlayerManager;
-    private PluginMessageSender pluginMessageSender;
+    private BungeeMessageSender pluginMessageSender;
 
     // Settings
     private boolean isAutoLogin;
@@ -39,21 +39,21 @@ public class PlayerListener implements Listener, SettingsDependent {
     private boolean chatRequiresAuth;
 
     @Inject
-    PlayerListener(Settings settings, AuthPlayerManager authPlayerManager, PluginMessageSender pluginMessageSender) {
+    BungeePlayerListener(SettingsManager settings, AuthPlayerManager authPlayerManager, BungeeMessageSender pluginMessageSender) {
         this.authPlayerManager = authPlayerManager;
         this.pluginMessageSender = pluginMessageSender;
         reload(settings);
     }
 
     @Override
-    public void reload(Settings settings) {
-        isAutoLogin = settings.getProperty(ConfigProperties.AUTOLOGIN);
-        isServerSwitchRequiresAuth = settings.getProperty(ConfigProperties.SERVER_SWITCH_REQUIRES_AUTH);
-        requiresAuthKickMessage = settings.getProperty(ConfigProperties.SERVER_SWITCH_KICK_MESSAGE);
-        authServers = settings.getProperty(ConfigProperties.AUTH_SERVERS);
-        isCommandsRequireAuth = settings.getProperty(ConfigProperties.COMMANDS_REQUIRE_AUTH);
-        commandWhitelist = settings.getProperty(ConfigProperties.COMMANDS_WHITELIST);
-        chatRequiresAuth = settings.getProperty(ConfigProperties.CHAT_REQUIRES_AUTH);
+    public void reload(SettingsManager settings) {
+        isAutoLogin = settings.getProperty(BungeeConfigProperties.AUTOLOGIN);
+        isServerSwitchRequiresAuth = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_REQUIRES_AUTH);
+        requiresAuthKickMessage = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_KICK_MESSAGE);
+        authServers = settings.getProperty(BungeeConfigProperties.AUTH_SERVERS);
+        isCommandsRequireAuth = settings.getProperty(BungeeConfigProperties.COMMANDS_REQUIRE_AUTH);
+        commandWhitelist = settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST);
+        chatRequiresAuth = settings.getProperty(BungeeConfigProperties.CHAT_REQUIRES_AUTH);
     }
 
     @EventHandler
@@ -108,7 +108,7 @@ public class PlayerListener implements Listener, SettingsDependent {
 
         // Player is trying to switch server (also called on first server player connection)
         if (authPlayer.isLogged()) {
-            // If player is logged in and autoLogin is enabled, send login signal to the bukkit side
+            // If player is logged in and autoLogin is enabled, send login signal to the spigot side
             if (isAutoLogin) {
                 try {
                     ByteArrayOutputStream bout = new ByteArrayOutputStream();

@@ -1,15 +1,15 @@
 package fr.xephi.authmebungee.bungeecord;
 
+import ch.jalu.configme.SettingsManager;
 import ch.jalu.injector.Injector;
 import ch.jalu.injector.InjectorBuilder;
-import fr.xephi.authmebungee.bungeecord.annotations.DataFolder;
-import fr.xephi.authmebungee.bungeecord.commands.ReloadCommand;
-import fr.xephi.authmebungee.bungeecord.config.Settings;
-import fr.xephi.authmebungee.bungeecord.config.SettingsProvider;
+import fr.xephi.authmebungee.bungeecord.commands.BungeeReloadCommand;
+import fr.xephi.authmebungee.bungeecord.config.BungeeSettingsProvider;
+import fr.xephi.authmebungee.bungeecord.listeners.BungeePlayerListener;
+import fr.xephi.authmebungee.bungeecord.listeners.BungeeMessageListener;
 import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
-import fr.xephi.authmebungee.bungeecord.listeners.PlayerListener;
-import fr.xephi.authmebungee.bungeecord.listeners.ServerListener;
-import fr.xephi.authmebungee.bungeecord.services.PluginMessageSender;
+import fr.xephi.authmebungee.bungeecord.services.BungeeMessageSender;
+import fr.xephi.authmebungee.common.annotations.DataFolder;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -19,9 +19,9 @@ public class AuthMeBungee extends Plugin {
 
     // Instances
     private Injector injector;
-    private Settings settings;
+    private SettingsManager settings;
     private AuthPlayerManager authPlayerManager;
-    private PluginMessageSender pluginMessageSender;
+    private BungeeMessageSender pluginMessageSender;
 
     public AuthMeBungee() {
     }
@@ -33,16 +33,16 @@ public class AuthMeBungee extends Plugin {
         setupInjector();
 
         // Get singletons from the injector
-        settings = injector.getSingleton(Settings.class);
+        settings = injector.getSingleton(SettingsManager.class);
         authPlayerManager = injector.getSingleton(AuthPlayerManager.class);
-        pluginMessageSender = injector.getSingleton(PluginMessageSender.class);
+        pluginMessageSender = injector.getSingleton(BungeeMessageSender.class);
 
         // Register commands
-        getProxy().getPluginManager().registerCommand(this, new ReloadCommand());
+        getProxy().getPluginManager().registerCommand(this, new BungeeReloadCommand());
 
         // Registering event listeners
-        getProxy().getPluginManager().registerListener(this, injector.getSingleton(ServerListener.class));
-        getProxy().getPluginManager().registerListener(this, injector.getSingleton(PlayerListener.class));
+        getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeeMessageListener.class));
+        getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeePlayerListener.class));
     }
 
     private void setupInjector() {
@@ -53,6 +53,6 @@ public class AuthMeBungee extends Plugin {
         injector.register(PluginManager.class, getProxy().getPluginManager());
         injector.register(TaskScheduler.class, getProxy().getScheduler());
         injector.provide(DataFolder.class, getDataFolder());
-        injector.registerProvider(Settings.class, SettingsProvider.class);
+        injector.registerProvider(SettingsManager.class, BungeeSettingsProvider.class);
     }
 }

@@ -11,12 +11,14 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class ServerListener implements Listener {
+public class BungeeMessageListener implements Listener {
 
     @Inject
     private AuthPlayerManager authPlayerManager;
 
-    public ServerListener() {
+    @Inject
+    BungeeMessageListener(AuthPlayerManager authPlayerManager) {
+        this.authPlayerManager = authPlayerManager;
     }
 
     @EventHandler
@@ -42,7 +44,7 @@ public class ServerListener implements Listener {
             // Read the plugin message
             DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
 
-            if(!in.readUTF().equals("AuthMeBungee")) {
+            if (!in.readUTF().equals("AuthMeBungee")) {
                 return;
             }
 

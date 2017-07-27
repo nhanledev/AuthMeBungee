@@ -1,6 +1,6 @@
 package fr.xephi.authmebungee.bungeecord.commands;
 
-import fr.xephi.authmebungee.bungeecord.config.Settings;
+import ch.jalu.configme.SettingsManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -8,12 +8,12 @@ import net.md_5.bungee.api.plugin.Command;
 
 import javax.inject.Inject;
 
-public class ReloadCommand extends Command {
+public class BungeeReloadCommand extends Command {
 
     @Inject
-    private Settings settings;
+    private SettingsManager settings;
 
-    public ReloadCommand() {
+    public BungeeReloadCommand() {
         super("abreload", "authmebungee.reload");
     }
 

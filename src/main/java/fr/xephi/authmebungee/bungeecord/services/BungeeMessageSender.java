@@ -7,14 +7,15 @@ import net.md_5.bungee.api.scheduler.TaskScheduler;
 
 import javax.inject.Inject;
 
-public class PluginMessageSender {
+public class BungeeMessageSender {
 
-    @Inject
-    private TaskScheduler scheduler;
-    @Inject
     private AuthMeBungee plugin;
+    private TaskScheduler scheduler;
 
-    public PluginMessageSender() {
+    @Inject
+    BungeeMessageSender(AuthMeBungee plugin, TaskScheduler scheduler) {
+        this.plugin = plugin;
+        this.scheduler = scheduler;
     }
 
     public void sendData(ServerInfo server, byte[] bytes, boolean async) {

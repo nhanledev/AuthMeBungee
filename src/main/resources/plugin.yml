@@ -1,4 +1,13 @@
 name: ${project.name}
-main: fr.xephi.authmebungee.bungeecord.AuthMeBungee
+main: fr.xephi.authmebungee.spigot.AuthMeBungee
 version: ${project.version}
 authors: [CryLegend, AuthMeTeam]
+depend: [AuthMe]
+commands:
+    abreload:
+        description: Reloads the AuthMeBungee config file
+        permission: authmebungee.reload
+permissions:
+    authmebungee.reload:
+        description: Allows to reload the config file
+        default: op

@@ -1,4 +1,6 @@
-package fr.xephi.authmebungee.bungeecord.config;
+package fr.xephi.authmebungee.common.config;
+
+import ch.jalu.configme.SettingsManager;
 
 /**
  * Interface for classes that keep a local copy of certain settings.
@@ -10,5 +12,5 @@ public interface SettingsDependent {
      *
      * @param settings the settings instance
      */
-    void reload(Settings settings);
+    void reload(SettingsManager settings);
 }

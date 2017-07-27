@@ -3,7 +3,12 @@ package fr.xephi.authmebungee.bungeecord.data;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import javax.inject.Inject;
+
 public class AuthPlayer {
+
+    @Inject
+    private ProxyServer proxy;
 
     private String name;
     private boolean isLogged;
@@ -29,11 +34,11 @@ public class AuthPlayer {
         this.isLogged = isLogged;
     }
 
-    public ProxiedPlayer getProxiedPlayer() {
-        return ProxyServer.getInstance().getPlayer(name);
+    public ProxiedPlayer getPlayer() {
+        return proxy.getPlayer(getName());
     }
 
     public boolean isOnline() {
-        return getProxiedPlayer() != null;
+        return getPlayer() != null;
     }
 }
