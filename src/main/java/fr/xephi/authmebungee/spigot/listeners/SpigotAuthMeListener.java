@@ -25,7 +25,7 @@ public class SpigotAuthMeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onAuthMeLogin(LoginEvent event) {
         final Player player = event.getPlayer();
-        try(ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bout)) {
+        try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bout)) {
             out.writeUTF("LOGIN:");
             out.writeUTF(player.getName());
             messageSender.sendData(bout.toByteArray(), true);
@@ -37,7 +37,7 @@ public class SpigotAuthMeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onAuthMeLogout(LogoutEvent event) {
         final Player player = event.getPlayer();
-        try(ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bout)) {
+        try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bout)) {
             out.writeUTF("LOGOUT:");
             out.writeUTF(player.getName());
             messageSender.sendData(bout.toByteArray(), true);
