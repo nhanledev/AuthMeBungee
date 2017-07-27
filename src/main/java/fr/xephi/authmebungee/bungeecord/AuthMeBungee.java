@@ -50,6 +50,12 @@ public class AuthMeBungee extends Plugin {
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeePlayerListener.class));
     }
 
+    @Override
+    public void onDisable() {
+        // Prevent plugin unload
+        getProxy().stop();
+    }
+
     private void setupInjector() {
         // Setup injector
         injector = new InjectorBuilder().addDefaultHandlers("fr.xephi.authmebungee.bungee").create();
