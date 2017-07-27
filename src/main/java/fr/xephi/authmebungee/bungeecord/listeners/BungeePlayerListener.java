@@ -9,10 +9,7 @@ import fr.xephi.authmebungee.common.config.SettingsDependent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.ServerSwitchEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -101,40 +98,52 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         event.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onServerConnect(ServerConnectEvent event) {
+        if (!isServerSwitchRequiresAuth || event.isCancelled()) {
+            return;
+        }
+
+        ProxiedPlayer player = event.getPlayer();
+        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        if (authPlayer.isLogged()) {
+            return;
+        }
+
+        // If player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
+        String server = event.getTarget().getName();
+        if (!authServers.contains(server)) {
+            event.setCancelled(true);
+            TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);
+            reasonMessage.setColor(ChatColor.RED);
+            player.sendMessage(reasonMessage);
+        }
+    }
+
     @EventHandler
     public void onServerSwitch(ServerSwitchEvent event) {
+        if(!isAutoLogin) {
+            return;
+        }
+
         ProxiedPlayer player = event.getPlayer();
         AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
 
         // Player is trying to switch server (also called on first server player connection)
         if (authPlayer.isLogged()) {
             // If player is logged in and autoLogin is enabled, send login signal to the spigot side
-            if (isAutoLogin) {
-                try {
-                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                    DataOutputStream out = new DataOutputStream(bout);
+            try {
+                ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(bout);
 
-                    out.writeUTF("AuthMeBungee");
-                    out.writeUTF("AutoLogin");
-                    out.writeUTF(authPlayer.getName());
+                out.writeUTF("AuthMeBungee");
+                out.writeUTF("AutoLogin");
+                out.writeUTF(authPlayer.getName());
 
-                    // Not using async as bungeecord already use multiple threads for player connections
-                    pluginMessageSender.sendData(event.getPlayer().getServer(), bout.toByteArray(), false);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } else {
-            // If player is not logged in and serverSwitchRequiresAuth is enabled, kick player
-            if (!isServerSwitchRequiresAuth) {
-                return;
-            }
-
-            String server = event.getPlayer().getServer().getInfo().getName();
-            if (!authServers.contains(server)) {
-                TextComponent kickReason = new TextComponent(requiresAuthKickMessage);
-                kickReason.setColor(ChatColor.RED);
-                event.getPlayer().disconnect(kickReason);
+                // Not using async as bungeecord already use multiple threads for player connections
+                pluginMessageSender.sendData(event.getPlayer().getServer(), bout.toByteArray(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
