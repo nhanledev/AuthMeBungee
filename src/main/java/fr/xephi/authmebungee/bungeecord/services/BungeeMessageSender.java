@@ -13,7 +13,7 @@ public class BungeeMessageSender {
     private TaskScheduler scheduler;
 
     @Inject
-    BungeeMessageSender(AuthMeBungee plugin, TaskScheduler scheduler) {
+    public BungeeMessageSender(AuthMeBungee plugin, TaskScheduler scheduler) {
         this.plugin = plugin;
         this.scheduler = scheduler;
     }

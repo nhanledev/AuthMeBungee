@@ -26,7 +26,8 @@ public class SpigotAuthMeListener implements Listener {
     public void onAuthMeLogin(LoginEvent event) {
         final Player player = event.getPlayer();
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bout)) {
-            out.writeUTF("LOGIN:");
+            out.writeUTF("AuthMeBungee");
+            out.writeUTF("Login");
             out.writeUTF(player.getName());
             messageSender.sendData(bout.toByteArray(), true);
         } catch (IOException e) {
@@ -38,7 +39,8 @@ public class SpigotAuthMeListener implements Listener {
     public void onAuthMeLogout(LogoutEvent event) {
         final Player player = event.getPlayer();
         try (ByteArrayOutputStream bout = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(bout)) {
-            out.writeUTF("LOGOUT:");
+            out.writeUTF("AuthMeBungee");
+            out.writeUTF("Logout");
             out.writeUTF(player.getName());
             messageSender.sendData(bout.toByteArray(), true);
         } catch (IOException e) {

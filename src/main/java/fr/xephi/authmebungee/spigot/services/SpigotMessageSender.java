@@ -12,7 +12,7 @@ public class SpigotMessageSender {
     private Server server;
 
     @Inject
-    SpigotMessageSender(AuthMeBungeeSpigot plugin, Server server) {
+    public SpigotMessageSender(AuthMeBungeeSpigot plugin, Server server) {
         this.plugin = plugin;
         this.server = server;
     }

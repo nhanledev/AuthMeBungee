@@ -36,7 +36,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     private boolean chatRequiresAuth;
 
     @Inject
-    BungeePlayerListener(SettingsManager settings, AuthPlayerManager authPlayerManager, BungeeMessageSender pluginMessageSender) {
+    public BungeePlayerListener(SettingsManager settings, AuthPlayerManager authPlayerManager, BungeeMessageSender pluginMessageSender) {
         this.authPlayerManager = authPlayerManager;
         this.pluginMessageSender = pluginMessageSender;
         reload(settings);

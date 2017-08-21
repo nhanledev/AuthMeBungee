@@ -21,7 +21,7 @@ public class SpigotMessageListener implements PluginMessageListener, SettingsDep
     private String autoLoginMessage;
 
     @Inject
-    SpigotMessageListener(Server server, SettingsManager settings, AuthMeApi authMeApi) {
+    public SpigotMessageListener(Server server, SettingsManager settings, AuthMeApi authMeApi) {
         this.server = server;
         this.authMeApi = authMeApi;
         reload(settings);
@@ -39,8 +39,7 @@ public class SpigotMessageListener implements PluginMessageListener, SettingsDep
         }
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
 
-        String type = in.readUTF();
-        if (!type.equals("AUTOLOGIN:")) {
+        if (!(in.readUTF().equals("AuthMeBungee") && in.readUTF().equals("AutoLogin"))) {
             return;
         }
 
