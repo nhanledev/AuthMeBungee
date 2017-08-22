@@ -14,7 +14,7 @@ public class BungeeReloadCommand extends Command {
     private SettingsManager settings;
 
     public BungeeReloadCommand() {
-        super("abreload", "authmebungee.reload");
+        super("abreloadproxy", "authmebungee.reload");
     }
 
     @Override

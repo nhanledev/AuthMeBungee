@@ -58,7 +58,7 @@ public class AuthMeBungee extends Plugin {
 
     private void setupInjector() {
         // Setup injector
-        injector = new InjectorBuilder().addDefaultHandlers("fr.xephi.authmebungee.bungee").create();
+        injector = new InjectorBuilder().addDefaultHandlers("").create();
         injector.register(AuthMeBungee.class, this);
         injector.register(ProxyServer.class, getProxy());
         injector.register(PluginManager.class, getProxy().getPluginManager());

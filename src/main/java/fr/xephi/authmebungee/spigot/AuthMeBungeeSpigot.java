@@ -45,7 +45,7 @@ public class AuthMeBungeeSpigot extends JavaPlugin {
 
     private void setupInjector() {
         // Setup injector
-        injector = new InjectorBuilder().addDefaultHandlers("fr.xephi.authmebungee.spigot").create();
+        injector = new InjectorBuilder().addDefaultHandlers("").create();
         injector.register(AuthMeBungeeSpigot.class, this);
         injector.register(Server.class, getServer());
         injector.register(PluginManager.class, getServer().getPluginManager());

@@ -13,11 +13,10 @@ import java.io.IOException;
 
 public class BungeeMessageListener implements Listener {
 
-    @Inject
     private AuthPlayerManager authPlayerManager;
 
     @Inject
-    BungeeMessageListener(AuthPlayerManager authPlayerManager) {
+    public BungeeMessageListener(AuthPlayerManager authPlayerManager) {
         this.authPlayerManager = authPlayerManager;
     }
 
@@ -37,9 +36,6 @@ public class BungeeMessageListener implements Listener {
             return;
         }
 
-        // Now that's sure, it's for us, so let's go
-        event.setCancelled(true);
-
         try {
             // Read the plugin message
             DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
@@ -48,14 +44,17 @@ public class BungeeMessageListener implements Listener {
                 return;
             }
 
+            // Now that's sure, it's for us, so let's go
+            event.setCancelled(true);
+
             // For now that's the only type of message the server is able to receive
             String task = in.readUTF();
 
             switch (task) {
-                case "LOGIN:":
+                case "Login":
                     authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(true);
                     break;
-                case "LOGOUT:":
+                case "Logout":
                     authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(false);
                     break;
             }
