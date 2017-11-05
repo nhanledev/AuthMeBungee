@@ -1,4 +1,4 @@
-package fr.xephi.authmebungee.bungeecord.commands;
+package fr.xephi.authmebungee.commands;
 
 import ch.jalu.configme.SettingsManager;
 import net.md_5.bungee.api.ChatColor;

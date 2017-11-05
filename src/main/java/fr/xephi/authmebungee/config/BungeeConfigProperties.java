@@ -1,4 +1,4 @@
-package fr.xephi.authmebungee.bungeecord.config;
+package fr.xephi.authmebungee.config;
 
 import ch.jalu.configme.Comment;
 import ch.jalu.configme.SettingsHolder;

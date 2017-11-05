@@ -1,4 +1,4 @@
-package fr.xephi.authmebungee.common.config;
+package fr.xephi.authmebungee.config;
 
 import ch.jalu.configme.SettingsManager;
 

@@ -1,15 +1,14 @@
-package fr.xephi.authmebungee.bungeecord;
+package fr.xephi.authmebungee;
 
 import ch.jalu.configme.SettingsManager;
 import ch.jalu.injector.Injector;
 import ch.jalu.injector.InjectorBuilder;
-import fr.xephi.authmebungee.bungeecord.commands.BungeeReloadCommand;
-import fr.xephi.authmebungee.bungeecord.config.BungeeSettingsProvider;
-import fr.xephi.authmebungee.bungeecord.listeners.BungeeMessageListener;
-import fr.xephi.authmebungee.bungeecord.listeners.BungeePlayerListener;
-import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
-import fr.xephi.authmebungee.bungeecord.services.BungeeMessageSender;
-import fr.xephi.authmebungee.common.annotations.DataFolder;
+import fr.xephi.authmebungee.annotations.DataFolder;
+import fr.xephi.authmebungee.commands.BungeeReloadCommand;
+import fr.xephi.authmebungee.config.BungeeSettingsProvider;
+import fr.xephi.authmebungee.listeners.BungeeMessageListener;
+import fr.xephi.authmebungee.listeners.BungeePlayerListener;
+import fr.xephi.authmebungee.services.AuthPlayerManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -22,7 +21,6 @@ public class AuthMeBungee extends Plugin {
     private Injector injector;
     private SettingsManager settings;
     private AuthPlayerManager authPlayerManager;
-    private BungeeMessageSender pluginMessageSender;
 
     public AuthMeBungee() {
     }
@@ -36,9 +34,8 @@ public class AuthMeBungee extends Plugin {
         // Get singletons from the injector
         settings = injector.getSingleton(SettingsManager.class);
         authPlayerManager = injector.getSingleton(AuthPlayerManager.class);
-        pluginMessageSender = injector.getSingleton(BungeeMessageSender.class);
 
-        for(ProxiedPlayer player : getProxy().getPlayers()) {
+        for (ProxiedPlayer player : getProxy().getPlayers()) {
             authPlayerManager.addAuthPlayer(player);
         }
 

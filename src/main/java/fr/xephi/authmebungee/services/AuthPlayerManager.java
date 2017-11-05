@@ -1,6 +1,6 @@
-package fr.xephi.authmebungee.bungeecord.services;
+package fr.xephi.authmebungee.services;
 
-import fr.xephi.authmebungee.bungeecord.data.AuthPlayer;
+import fr.xephi.authmebungee.data.AuthPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.HashMap;
@@ -21,11 +21,11 @@ public class AuthPlayerManager {
     }
 
     public void addAuthPlayer(ProxiedPlayer player) {
-        addAuthPlayer(new AuthPlayer(player.getName()));
+        addAuthPlayer(new AuthPlayer(player.getName().toLowerCase()));
     }
 
     public void removeAuthPlayer(String name) {
-        players.remove(name);
+        players.remove(name.toLowerCase());
     }
 
     public void removeAuthPlayer(ProxiedPlayer player) {
@@ -33,7 +33,7 @@ public class AuthPlayerManager {
     }
 
     public AuthPlayer getAuthPlayer(String name) {
-        return players.get(name);
+        return players.get(name.toLowerCase());
     }
 
     public AuthPlayer getAuthPlayer(ProxiedPlayer player) {

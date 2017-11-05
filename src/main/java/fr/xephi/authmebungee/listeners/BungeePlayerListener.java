@@ -1,11 +1,10 @@
-package fr.xephi.authmebungee.bungeecord.listeners;
+package fr.xephi.authmebungee.listeners;
 
 import ch.jalu.configme.SettingsManager;
-import fr.xephi.authmebungee.bungeecord.config.BungeeConfigProperties;
-import fr.xephi.authmebungee.bungeecord.data.AuthPlayer;
-import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
-import fr.xephi.authmebungee.bungeecord.services.BungeeMessageSender;
-import fr.xephi.authmebungee.common.config.SettingsDependent;
+import fr.xephi.authmebungee.config.BungeeConfigProperties;
+import fr.xephi.authmebungee.config.SettingsDependent;
+import fr.xephi.authmebungee.data.AuthPlayer;
+import fr.xephi.authmebungee.services.AuthPlayerManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -24,7 +23,6 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
     // Services
     private AuthPlayerManager authPlayerManager;
-    private BungeeMessageSender pluginMessageSender;
 
     // Settings
     private boolean isAutoLogin;
@@ -36,9 +34,8 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     private boolean chatRequiresAuth;
 
     @Inject
-    public BungeePlayerListener(SettingsManager settings, AuthPlayerManager authPlayerManager, BungeeMessageSender pluginMessageSender) {
+    public BungeePlayerListener(SettingsManager settings, AuthPlayerManager authPlayerManager) {
         this.authPlayerManager = authPlayerManager;
-        this.pluginMessageSender = pluginMessageSender;
         reload(settings);
     }
 
@@ -122,7 +119,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
     @EventHandler
     public void onServerSwitch(ServerSwitchEvent event) {
-        if(!isAutoLogin) {
+        if (!isAutoLogin) {
             return;
         }
 
@@ -136,12 +133,11 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
                 ByteArrayOutputStream bout = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(bout);
 
-                out.writeUTF("AuthMeBungee");
+                out.writeUTF("AuthMe");
                 out.writeUTF("AutoLogin");
                 out.writeUTF(authPlayer.getName());
 
-                // Not using async as bungeecord already use multiple threads for player connections
-                pluginMessageSender.sendData(event.getPlayer().getServer(), bout.toByteArray(), false);
+                event.getPlayer().getServer().sendData("BungeeCord", bout.toByteArray());
             } catch (IOException e) {
                 e.printStackTrace();
             }

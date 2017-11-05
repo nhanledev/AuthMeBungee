@@ -1,6 +1,6 @@
-package fr.xephi.authmebungee.bungeecord.listeners;
+package fr.xephi.authmebungee.listeners;
 
-import fr.xephi.authmebungee.bungeecord.services.AuthPlayerManager;
+import fr.xephi.authmebungee.services.AuthPlayerManager;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -40,7 +40,7 @@ public class BungeeMessageListener implements Listener {
             // Read the plugin message
             DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
 
-            if (!in.readUTF().equals("AuthMeBungee")) {
+            if (!in.readUTF().equals("AuthMe")) {
                 return;
             }
 
@@ -51,10 +51,10 @@ public class BungeeMessageListener implements Listener {
             String task = in.readUTF();
 
             switch (task) {
-                case "Login":
+                case "login":
                     authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(true);
                     break;
-                case "Logout":
+                case "logout":
                     authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(false);
                     break;
             }

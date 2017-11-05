@@ -1,4 +1,4 @@
-package fr.xephi.authmebungee.bungeecord.data;
+package fr.xephi.authmebungee.data;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -14,7 +14,7 @@ public class AuthPlayer {
     private boolean isLogged;
 
     public AuthPlayer(String name, boolean isLogged) {
-        this.name = name;
+        this.name = name.toLowerCase();
         this.isLogged = isLogged;
     }
 
@@ -35,7 +35,12 @@ public class AuthPlayer {
     }
 
     public ProxiedPlayer getPlayer() {
-        return proxy.getPlayer(getName());
+        for (ProxiedPlayer current : proxy.getPlayers()) {
+            if (current.getName().equalsIgnoreCase(name)) {
+                return current;
+            }
+        }
+        return null;
     }
 
     public boolean isOnline() {

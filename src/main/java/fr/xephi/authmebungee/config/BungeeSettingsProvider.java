@@ -1,9 +1,9 @@
-package fr.xephi.authmebungee.bungeecord.config;
+package fr.xephi.authmebungee.config;
 
-import fr.xephi.authmebungee.common.annotations.DataFolder;
-import fr.xephi.authmebungee.common.config.SettingsProvider;
-import java.io.File;
+import fr.xephi.authmebungee.annotations.DataFolder;
+
 import javax.inject.Inject;
+import java.io.File;
 
 public class BungeeSettingsProvider extends SettingsProvider {
 
