@@ -13,10 +13,9 @@ AutoLogin: If you have AuthMe on multiple servers, you can enable autoLogin opti
 ## Installation
 
 1. Download AuthMeBungee package
-2. Place AuthMeBungee-Bungeecord.jar into your BungeeCord's plugin folder
-3. Place AuthMeBungee-Bukkit.jar into your Bukkit servers plugin folders
+2. Place AuthMeBungee.jar into your BungeeCord's plugin folder
 4. Restart everything
-5. Configure the bungee-side plugin (don't forget to config authServers)
+5. Configure the plugin (don't forget to config authServers)
 6. Enjoy!
 
 **Please follow these steps and configure the plugin before saying it doesn't work!**
