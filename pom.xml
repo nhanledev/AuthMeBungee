@@ -44,7 +44,6 @@
     <properties>
         <!-- Project Properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <authMeVersion>5.4.0-SNAPSHOT</authMeVersion>
     </properties>
 
     <build>
@@ -79,6 +78,32 @@
                 <version>3.1.0</version>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <relocations>
+                        <relocation>
+                            <pattern>javax.annotation</pattern>
+                            <shadedPattern>fr.xephi.authmebungee.libs.javax.annotation</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>javax.inject</pattern>
+                            <shadedPattern>fr.xephi.authmebungee.libs.javax.inject</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>ch.jalu.injector</pattern>
+                            <shadedPattern>fr.xephi.authmebungee.libs.jalu.injector</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.yaml.snakeyaml</pattern>
+                            <shadedPattern>fr.xephi.authmebungee.libs.yaml.snakeyaml</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>ch.jalu.configme</pattern>
+                            <shadedPattern>fr.xephi.authmebungee.libs.jalu.configme</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <shadedPattern>fr.xephi.authmebungee</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
                 <executions>
                     <execution>
@@ -94,24 +119,24 @@
     </build>
 
     <repositories>
-        <!-- Bungeecord Repo -->
+        <!-- Bungeecord repository -->
         <repository>
             <id>oss-repo</id>
             <url>http://oss.sonatype.org/content/groups/public</url>
         </repository>
-        <!-- AuthMe Repo -->
+        <!-- bStats repository -->
         <repository>
-            <id>xephi-repo</id>
-            <url>http://ci.xephi.fr/plugin/repository/everything/</url>
+            <id>bstats-repo</id>
+            <url>http://repo.bstats.org/content/repositories/releases/</url>
         </repository>
     </repositories>
 
     <dependencies>
-        <!-- Dependency Injection -->
+        <!-- Dependency injection -->
         <dependency>
             <groupId>ch.jalu</groupId>
             <artifactId>injector</artifactId>
-            <version>0.4.1</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 
@@ -131,12 +156,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- AuthMeAPI -->
+        <!-- Metrics -->
         <dependency>
-            <groupId>fr.xephi</groupId>
-            <artifactId>authme</artifactId>
-            <version>5.4-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bungeecord</artifactId>
+            <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

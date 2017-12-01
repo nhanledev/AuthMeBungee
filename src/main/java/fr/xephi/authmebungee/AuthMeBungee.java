@@ -14,6 +14,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
+import org.bstats.bungeecord.Metrics;
 
 public class AuthMeBungee extends Plugin {
 
@@ -27,7 +28,6 @@ public class AuthMeBungee extends Plugin {
 
     @Override
     public void onEnable() {
-
         // Prepare the injector and register stuff
         setupInjector();
 
@@ -45,6 +45,9 @@ public class AuthMeBungee extends Plugin {
         // Registering event listeners
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeeMessageListener.class));
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeePlayerListener.class));
+
+        // Send metrics data
+        new Metrics(this);
     }
 
     @Override
