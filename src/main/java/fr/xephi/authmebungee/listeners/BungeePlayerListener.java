@@ -5,10 +5,11 @@ import fr.xephi.authmebungee.config.BungeeConfigProperties;
 import fr.xephi.authmebungee.config.SettingsDependent;
 import fr.xephi.authmebungee.data.AuthPlayer;
 import fr.xephi.authmebungee.services.AuthPlayerManager;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.*;
+import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
+import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
@@ -93,28 +94,6 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             return;
         }
         event.setCancelled(true);
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onServerConnect(ServerConnectEvent event) {
-        if (!isServerSwitchRequiresAuth || event.isCancelled()) {
-            return;
-        }
-
-        ProxiedPlayer player = event.getPlayer();
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
-        if (authPlayer.isLogged()) {
-            return;
-        }
-
-        // If player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
-        String server = event.getTarget().getName();
-        if (!authServers.contains(server)) {
-            event.setCancelled(true);
-            TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);
-            reasonMessage.setColor(ChatColor.RED);
-            player.sendMessage(reasonMessage);
-        }
     }
 
     @EventHandler
