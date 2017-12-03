@@ -12,7 +12,7 @@ AutoLogin: If you have AuthMe on multiple servers, you can enable autoLogin opti
 ## Requirements
 
 - Java 1.8+
-- BungeeCord/Waterfall 1.7+
+- BungeeCord/Waterfall/Travertine 1.7+
 - CraftBukkit/Spigot/Paper/Tacospigot 1.7.10+
 
 ## Installation
