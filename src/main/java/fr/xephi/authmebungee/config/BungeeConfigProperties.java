@@ -34,4 +34,5 @@ public class BungeeConfigProperties implements SettingsHolder {
 
     private BungeeConfigProperties() {
     }
+
 }

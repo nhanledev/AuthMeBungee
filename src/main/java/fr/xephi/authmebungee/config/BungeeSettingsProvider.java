@@ -11,4 +11,5 @@ public class BungeeSettingsProvider extends SettingsProvider {
     public BungeeSettingsProvider(@DataFolder File dataFolder) {
         super(dataFolder, BungeeConfigProperties.class);
     }
+
 }

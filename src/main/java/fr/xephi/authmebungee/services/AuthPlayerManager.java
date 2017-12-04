@@ -4,13 +4,14 @@ import fr.xephi.authmebungee.data.AuthPlayer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /*
  * Players manager - store all references to AuthPlayer objects through an HashMap
  */
 public class AuthPlayerManager {
 
-    private HashMap<String, AuthPlayer> players;
+    private Map<String, AuthPlayer> players;
 
     public AuthPlayerManager() {
         players = new HashMap<>();

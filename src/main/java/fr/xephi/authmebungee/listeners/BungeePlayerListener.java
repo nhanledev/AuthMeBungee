@@ -25,7 +25,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     private AuthPlayerManager authPlayerManager;
 
     // Settings
-    private boolean isAutoLogin;
+    private boolean isAutoLoginEnabled;
     private boolean isServerSwitchRequiresAuth;
     private String requiresAuthKickMessage;
     private List<String> authServers;
@@ -41,7 +41,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
     @Override
     public void reload(SettingsManager settings) {
-        isAutoLogin = settings.getProperty(BungeeConfigProperties.AUTOLOGIN);
+        isAutoLoginEnabled = settings.getProperty(BungeeConfigProperties.AUTOLOGIN);
         isServerSwitchRequiresAuth = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_REQUIRES_AUTH);
         requiresAuthKickMessage = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_KICK_MESSAGE);
         authServers = settings.getProperty(BungeeConfigProperties.AUTH_SERVERS);
@@ -62,6 +62,10 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         authPlayerManager.removeAuthPlayer(event.getPlayer());
     }
 
+    private boolean isInAuthServer(ProxiedPlayer player) {
+        return authServers.contains(player.getServer().getInfo().getName());
+    }
+
     // Priority is set to lowest to keep compatibility with some chat plugins
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(ChatEvent event) {
@@ -71,6 +75,12 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
         // Check if it's a player
         if (!(event.getSender() instanceof ProxiedPlayer)) {
+            return;
+        }
+        ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+
+        // Filter only auth servers
+        if(!isInAuthServer(player)) {
             return;
         }
 
@@ -89,7 +99,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         }
 
         // If player is not logged in, cancel the event
-        if (authPlayerManager.getAuthPlayer((ProxiedPlayer) event.getSender()).isLogged()) {
+        if (authPlayerManager.getAuthPlayer(player).isLogged()) {
             return;
         }
         event.setCancelled(true);
@@ -100,47 +110,61 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         if (!isServerSwitchRequiresAuth || event.isCancelled()) {
             return;
         }
-
         ProxiedPlayer player = event.getPlayer();
+
+        // Only check non auth servers
+        if(authServers.contains(event.getTarget().getName())) {
+            return;
+        }
+
+        // Skip logged users
         AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
         if (authPlayer.isLogged()) {
             return;
         }
 
-        // If player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
+        // If the player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
         String server = event.getTarget().getName();
         if (!authServers.contains(server)) {
             event.setCancelled(true);
+
             TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);
             reasonMessage.setColor(ChatColor.RED);
-            player.sendMessage(reasonMessage);
+
+            // Handle race condition on player join on a misconfigured network
+            if(player.getServer() == null) {
+                player.disconnect(reasonMessage);
+            } else {
+                player.sendMessage(reasonMessage);
+            }
         }
     }
 
     @EventHandler
     public void onServerSwitch(ServerSwitchEvent event) {
-        if (!isAutoLogin) {
+        if (!isAutoLoginEnabled) {
             return;
         }
 
         ProxiedPlayer player = event.getPlayer();
         AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        if (!authPlayer.isLogged()) {
+            return;
+        }
 
-        // Player is trying to switch server (also called on first server player connection)
-        if (authPlayer.isLogged()) {
-            // If player is logged in and autoLogin is enabled, send login signal to the spigot side
-            try {
-                ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                DataOutputStream out = new DataOutputStream(bout);
+        // If player is logged in and autoLogin is enabled, send login signal to the spigot side
+        try {
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            DataOutputStream out = new DataOutputStream(bout);
 
-                out.writeUTF("AuthMe");
-                out.writeUTF("bungeelogin");
-                out.writeUTF(authPlayer.getName());
+            out.writeUTF("AuthMe");
+            out.writeUTF("bungeelogin");
+            out.writeUTF(authPlayer.getName());
 
-                event.getPlayer().getServer().sendData("BungeeCord", bout.toByteArray());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            event.getPlayer().getServer().sendData("BungeeCord", bout.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 }

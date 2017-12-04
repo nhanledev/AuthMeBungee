@@ -1,5 +1,7 @@
 package fr.xephi.authmebungee.listeners;
 
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 import fr.xephi.authmebungee.services.AuthPlayerManager;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
@@ -7,9 +9,6 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 
 public class BungeeMessageListener implements Listener {
 
@@ -26,41 +25,35 @@ public class BungeeMessageListener implements Listener {
             return;
         }
 
-        // Check if the message is for us
+        // Check if the message is for a server (ignore client messages)
         if (!event.getTag().equals("BungeeCord")) {
             return;
         }
 
-        // Check if a player is not trying to rip us off sending a fake message
+        // Check if a player is not trying to send us a fake message
         if (!(event.getSender() instanceof Server)) {
             return;
         }
 
-        try {
-            // Read the plugin message
-            DataInputStream in = new DataInputStream(new ByteArrayInputStream(event.getData()));
+        // Read the plugin message
+        ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
-            if (!in.readUTF().equals("AuthMe")) {
-                return;
-            }
+        if (!in.readUTF().equals("AuthMe")) {
+            return;
+        }
+        // Now that's sure, it's for us, so let's go
+        event.setCancelled(true);
 
-            // Now that's sure, it's for us, so let's go
-            event.setCancelled(true);
-
-            // For now that's the only type of message the server is able to receive
-            String task = in.readUTF();
-
-            switch (task) {
-                case "login":
-                    authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(true);
-                    break;
-                case "logout":
-                    authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(false);
-                    break;
-            }
-        } catch (IOException ex) {
-            // Something nasty happened
-            ex.printStackTrace();
+        // For now that's the only type of message the server is able to receive
+        String type = in.readUTF();
+        switch (type) {
+            case "login":
+                authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(true);
+                break;
+            case "logout":
+                authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(false);
+                break;
         }
     }
+
 }

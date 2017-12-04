@@ -24,4 +24,5 @@ public class BungeeReloadCommand extends Command {
             new ComponentBuilder("AuthMeBungee configuration reloaded!").color(ChatColor.GREEN).create()
         );
     }
+
 }

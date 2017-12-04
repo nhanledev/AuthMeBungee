@@ -13,4 +13,5 @@ public interface SettingsDependent {
      * @param settings the settings instance
      */
     void reload(SettingsManager settings);
+
 }

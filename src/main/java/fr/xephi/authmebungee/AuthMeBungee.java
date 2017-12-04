@@ -5,6 +5,7 @@ import ch.jalu.injector.Injector;
 import ch.jalu.injector.InjectorBuilder;
 import fr.xephi.authmebungee.annotations.DataFolder;
 import fr.xephi.authmebungee.commands.BungeeReloadCommand;
+import fr.xephi.authmebungee.config.BungeeConfigProperties;
 import fr.xephi.authmebungee.config.BungeeSettingsProvider;
 import fr.xephi.authmebungee.listeners.BungeeMessageListener;
 import fr.xephi.authmebungee.listeners.BungeePlayerListener;
@@ -15,6 +16,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.api.scheduler.TaskScheduler;
 import org.bstats.bungeecord.Metrics;
+
+import java.util.logging.Logger;
 
 public class AuthMeBungee extends Plugin {
 
@@ -35,6 +38,13 @@ public class AuthMeBungee extends Plugin {
         settings = injector.getSingleton(SettingsManager.class);
         authPlayerManager = injector.getSingleton(AuthPlayerManager.class);
 
+        // Print some config information
+        getLogger().info("Current auth servers:");
+        for (String authServer : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
+            getLogger().info("> " + authServer);
+        }
+
+        // Add online players (plugin hotswap, just in case)
         for (ProxiedPlayer player : getProxy().getPlayers()) {
             authPlayerManager.addAuthPlayer(player);
         }
@@ -59,6 +69,7 @@ public class AuthMeBungee extends Plugin {
     private void setupInjector() {
         // Setup injector
         injector = new InjectorBuilder().addDefaultHandlers("").create();
+        injector.register(Logger.class, getLogger());
         injector.register(AuthMeBungee.class, this);
         injector.register(ProxyServer.class, getProxy());
         injector.register(PluginManager.class, getProxy().getPluginManager());
@@ -66,4 +77,5 @@ public class AuthMeBungee extends Plugin {
         injector.provide(DataFolder.class, getDataFolder());
         injector.registerProvider(SettingsManager.class, BungeeSettingsProvider.class);
     }
+
 }

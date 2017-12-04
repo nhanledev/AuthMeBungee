@@ -38,4 +38,5 @@ public abstract class SettingsProvider implements Provider<SettingsManager> {
         PropertyResource resource = new YamlFileResource(configFile);
         return new SettingsManager(resource, new PlainMigrationService(), properties);
     }
+
 }
