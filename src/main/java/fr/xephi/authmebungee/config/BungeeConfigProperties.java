@@ -31,6 +31,12 @@ public class BungeeConfigProperties implements SettingsHolder {
     @Comment("Enable auto-login between servers")
     public static final Property<Boolean> AUTOLOGIN =
         newProperty("autoLogin", false);
+    @Comment("If enabled, unlogged users will be sent to the unloggedUserServer server!")
+    public static final Property<Boolean> ENABLE_SEND_ON_LOGOUT =
+        newProperty("sendOnLogout", false);
+    @Comment("If sendOnLogout is enabled, unlogged users will be sent to this server!")
+    public static final Property<String> SEND_ON_LOGOUT_TARGET =
+        newProperty("unloggedUserServer", "");
 
     private BungeeConfigProperties() {
     }

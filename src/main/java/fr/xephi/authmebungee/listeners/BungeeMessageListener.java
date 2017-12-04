@@ -1,8 +1,14 @@
 package fr.xephi.authmebungee.listeners;
 
+import ch.jalu.configme.SettingsManager;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+import fr.xephi.authmebungee.config.BungeeConfigProperties;
+import fr.xephi.authmebungee.config.SettingsDependent;
+import fr.xephi.authmebungee.data.AuthPlayer;
 import fr.xephi.authmebungee.services.AuthPlayerManager;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -10,13 +16,25 @@ import net.md_5.bungee.event.EventHandler;
 
 import javax.inject.Inject;
 
-public class BungeeMessageListener implements Listener {
+public class BungeeMessageListener implements Listener, SettingsDependent {
 
+    // Services
     private AuthPlayerManager authPlayerManager;
 
+    // Settings
+    private boolean isSendOnLogoutEnabled;
+    private String sendOnLogoutTarget;
+
     @Inject
-    public BungeeMessageListener(AuthPlayerManager authPlayerManager) {
+    public BungeeMessageListener(SettingsManager settings, AuthPlayerManager authPlayerManager) {
         this.authPlayerManager = authPlayerManager;
+        reload(settings);
+    }
+
+    @Override
+    public void reload(SettingsManager settings) {
+        isSendOnLogoutEnabled = settings.getProperty(BungeeConfigProperties.ENABLE_SEND_ON_LOGOUT);
+        sendOnLogoutTarget = settings.getProperty(BungeeConfigProperties.SEND_ON_LOGOUT_TARGET);
     }
 
     @EventHandler
@@ -48,11 +66,29 @@ public class BungeeMessageListener implements Listener {
         String type = in.readUTF();
         switch (type) {
             case "login":
-                authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(true);
+                handleOnLogin(in);
                 break;
             case "logout":
-                authPlayerManager.getAuthPlayer(in.readUTF()).setLogged(false);
+                handleOnLogout(in);
                 break;
+        }
+    }
+
+    private void handleOnLogin(ByteArrayDataInput in) {
+        String name = in.readUTF();
+        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
+        authPlayer.setLogged(true);
+    }
+
+    private void handleOnLogout(ByteArrayDataInput in) {
+        String name = in.readUTF();
+        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
+        authPlayer.setLogged(false);
+        if(isSendOnLogoutEnabled) {
+            ProxiedPlayer player = authPlayer.getPlayer();
+            if(player != null) {
+                player.connect(ProxyServer.getInstance().getServerInfo(sendOnLogoutTarget));
+            }
         }
     }
 
