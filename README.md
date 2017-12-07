@@ -21,6 +21,7 @@ AutoLogin: If you have AuthMe on multiple servers, you can enable autoLogin opti
 2. Place AuthMeBungee.jar into your BungeeCord's plugin folder
 4. Restart everything
 5. Configure the plugin (don't forget to config authServers)
-6. Enjoy!
+6. Enable the **Hooks.bungeecord** option in your **AuthMeReloaded config file**
+7. Enjoy!
 
 **Please follow these steps and configure the plugin before saying it doesn't work!**
