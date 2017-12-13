@@ -60,12 +60,6 @@ public class AuthMeBungee extends Plugin {
         new Metrics(this);
     }
 
-    @Override
-    public void onDisable() {
-        // Prevent plugin unload
-        getProxy().stop();
-    }
-
     private void setupInjector() {
         // Setup injector
         injector = new InjectorBuilder().addDefaultHandlers("").create();
