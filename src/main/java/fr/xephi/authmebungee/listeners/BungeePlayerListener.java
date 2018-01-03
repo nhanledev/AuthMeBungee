@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class BungeePlayerListener implements Listener, SettingsDependent {
@@ -44,7 +45,10 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         isAutoLoginEnabled = settings.getProperty(BungeeConfigProperties.AUTOLOGIN);
         isServerSwitchRequiresAuth = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_REQUIRES_AUTH);
         requiresAuthKickMessage = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_KICK_MESSAGE);
-        authServers = settings.getProperty(BungeeConfigProperties.AUTH_SERVERS);
+        authServers = new ArrayList<>();
+        for(String server : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
+            authServers.add(server.toLowerCase());
+        }
         isCommandsRequireAuth = settings.getProperty(BungeeConfigProperties.COMMANDS_REQUIRE_AUTH);
         commandWhitelist = settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST);
         chatRequiresAuth = settings.getProperty(BungeeConfigProperties.CHAT_REQUIRES_AUTH);
@@ -63,7 +67,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     }
 
     private boolean isInAuthServer(ProxiedPlayer player) {
-        return authServers.contains(player.getServer().getInfo().getName());
+        return authServers.contains(player.getServer().getInfo().getName().toLowerCase());
     }
 
     // Priority is set to lowest to keep compatibility with some chat plugins
@@ -125,7 +129,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
         // If the player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
         String server = event.getTarget().getName();
-        if (!authServers.contains(server)) {
+        if (!authServers.contains(server.toLowerCase())) {
             event.setCancelled(true);
 
             TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);

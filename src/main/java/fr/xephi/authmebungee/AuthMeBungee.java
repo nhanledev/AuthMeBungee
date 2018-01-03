@@ -41,7 +41,7 @@ public class AuthMeBungee extends Plugin {
         // Print some config information
         getLogger().info("Current auth servers:");
         for (String authServer : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
-            getLogger().info("> " + authServer);
+            getLogger().info("> " + authServer.toLowerCase());
         }
 
         // Add online players (plugin hotswap, just in case)
