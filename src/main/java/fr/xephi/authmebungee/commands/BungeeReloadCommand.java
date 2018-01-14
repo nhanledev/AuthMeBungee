@@ -10,11 +10,12 @@ import javax.inject.Inject;
 
 public class BungeeReloadCommand extends Command {
 
-    @Inject
     private SettingsManager settings;
 
-    public BungeeReloadCommand() {
+    @Inject
+    public BungeeReloadCommand(SettingsManager settings) {
         super("abreloadproxy", "authmebungee.reload");
+        this.settings = settings;
     }
 
     @Override
