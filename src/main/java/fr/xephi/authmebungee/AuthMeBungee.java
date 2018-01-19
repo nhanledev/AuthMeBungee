@@ -50,7 +50,7 @@ public class AuthMeBungee extends Plugin {
         }
 
         // Register commands
-        getProxy().getPluginManager().registerCommand(this, new BungeeReloadCommand());
+        getProxy().getPluginManager().registerCommand(this, injector.getSingleton(BungeeReloadCommand.class));
 
         // Registering event listeners
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeeMessageListener.class));
