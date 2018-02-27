@@ -59,6 +59,8 @@
     </properties>
 
     <build>
+        <defaultGoal>clean install</defaultGoal>
+        <finalName>${project.name}-${project.version}-noshade</finalName>
         <resources>
             <resource>
                 <filtering>false</filtering>
