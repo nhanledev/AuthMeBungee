@@ -20,7 +20,7 @@ This plugin acts like a bridge between your bukkit servers and your BungeeCord i
 1. Download AuthMeBungee package
 2. Place AuthMeBungee.jar into your BungeeCord's plugin folder
 4. Restart everything
-5. Configure the plugin (don't forget to config authServers)
+5. Configure the plugin **(don't forget to config authServers)**
 6. Enable the **Hooks.bungeecord** option in your **AuthMeReloaded config file**
 7. Enjoy!
 
