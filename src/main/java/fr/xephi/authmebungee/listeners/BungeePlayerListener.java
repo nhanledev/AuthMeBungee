@@ -123,7 +123,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
         // Skip logged users
         AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
-        if (authPlayer.isLogged()) {
+        if (authPlayer != null && authPlayer.isLogged()) {
             return;
         }
 
