@@ -69,8 +69,36 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         authPlayerManager.removeAuthPlayer(event.getPlayer());
     }
 
-    private boolean isInAuthServer(ProxiedPlayer player) {
-        return authServers.contains(player.getServer().getInfo().getName().toLowerCase());
+    private boolean notInAuthServer(ProxiedPlayer player) {
+        return !authServers.contains(player.getServer().getInfo().getName().toLowerCase());
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onCommand(ChatEvent event) {
+        if (event.isCancelled() || !event.isCommand() || !isCommandsRequireAuth) {
+            return;
+        }
+
+        // Check if it's a player
+        if (!(event.getSender() instanceof ProxiedPlayer)) {
+            return;
+        }
+        ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+
+        // filter only unauthenticated players
+        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        if (authPlayer != null && authPlayer.isLogged()) {
+            return;
+        }
+        // in auth servers
+        if (notInAuthServer(player)) {
+            return;
+        }
+        // Check if command is whitelisted command
+        if (commandWhitelist.contains(event.getMessage().split(" ")[0].toLowerCase())) {
+            return;
+        }
+        event.setCancelled(true);
     }
 
     // Priority is set to lowest to keep compatibility with some chat plugins
@@ -92,22 +120,13 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             return;
         }
         // in auth servers
-        if (!isInAuthServer(player)) {
+        if (notInAuthServer(player)) {
             return;
         }
 
-        if (event.isCommand()) {
-            if (!isCommandsRequireAuth) {
-                return;
-            }
-            // Check if command is whitelisted command
-            if (commandWhitelist.contains(event.getMessage().split(" ")[0].toLowerCase())) {
-                return;
-            }
-        } else if (!chatRequiresAuth) {
+        if (!chatRequiresAuth) {
             return;
         }
-        // Cancel the event if it doesn't meet any of requirements above
         event.setCancelled(true);
     }
 
