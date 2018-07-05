@@ -46,11 +46,14 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         isServerSwitchRequiresAuth = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_REQUIRES_AUTH);
         requiresAuthKickMessage = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_KICK_MESSAGE);
         authServers = new ArrayList<>();
-        for(String server : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
+        for (String server : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
             authServers.add(server.toLowerCase());
         }
         isCommandsRequireAuth = settings.getProperty(BungeeConfigProperties.COMMANDS_REQUIRE_AUTH);
-        commandWhitelist = settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST);
+        commandWhitelist = new ArrayList<>();
+        for (String command : settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST)) {
+            commandWhitelist.add(command.toLowerCase());
+        }
         chatRequiresAuth = settings.getProperty(BungeeConfigProperties.CHAT_REQUIRES_AUTH);
     }
 
@@ -94,7 +97,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             }
 
             // Check if command is a whitelisted command
-            String label = event.getMessage().split(" ")[0];
+            String label = event.getMessage().split(" ")[0].toLowerCase();
             if (commandWhitelist.contains(label)) {
                 return;
             }
@@ -136,7 +139,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             reasonMessage.setColor(ChatColor.RED);
 
             // Handle race condition on player join on a misconfigured network
-            if(player.getServer() == null) {
+            if (player.getServer() == null) {
                 player.disconnect(reasonMessage);
             } else {
                 player.sendMessage(reasonMessage);
