@@ -77,17 +77,21 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
     private void handleOnLogin(ByteArrayDataInput in) {
         String name = in.readUTF();
         AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
-        authPlayer.setLogged(true);
+        if (authPlayer != null) {
+            authPlayer.setLogged(true);
+        }
     }
 
     private void handleOnLogout(ByteArrayDataInput in) {
         String name = in.readUTF();
         AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
-        authPlayer.setLogged(false);
-        if(isSendOnLogoutEnabled) {
-            ProxiedPlayer player = authPlayer.getPlayer();
-            if(player != null) {
-                player.connect(ProxyServer.getInstance().getServerInfo(sendOnLogoutTarget));
+        if (authPlayer != null) {
+            authPlayer.setLogged(false);
+            if (isSendOnLogoutEnabled) {
+                ProxiedPlayer player = authPlayer.getPlayer();
+                if (player != null) {
+                    player.connect(ProxyServer.getInstance().getServerInfo(sendOnLogoutTarget));
+                }
             }
         }
     }

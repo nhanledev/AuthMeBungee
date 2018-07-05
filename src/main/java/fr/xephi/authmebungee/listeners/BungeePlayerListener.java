@@ -76,7 +76,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     // Priority is set to lowest to keep compatibility with some chat plugins
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(ChatEvent event) {
-        if (event.isCancelled() || !isCommandsRequireAuth) {
+        if (event.isCancelled()) {
             return;
         }
 
@@ -86,26 +86,28 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         }
         ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
-        // Filter only auth servers
-        if(!isInAuthServer(player)) {
+        // filter only unauthenticated players
+        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        if (authPlayer != null && authPlayer.isLogged()) {
+            return;
+        }
+        // in auth servers
+        if (!isInAuthServer(player)) {
             return;
         }
 
         if (event.isCommand()) {
-            // Check if command is a whitelisted command
-            String label = event.getMessage().split(" ")[0].toLowerCase();
-            if (commandWhitelist.contains(label)) {
+            if (!isCommandsRequireAuth) {
+                return;
+            }
+            // Check if command is whitelisted command
+            if (commandWhitelist.contains(event.getMessage().split(" ")[0].toLowerCase())) {
                 return;
             }
         } else if (!chatRequiresAuth) {
             return;
         }
-
-        // If player is not logged in, cancel the event
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
-        if (authPlayer != null && authPlayer.isLogged()) {
-            return;
-        }
+        // Cancel the event if it doesn't meet any of requirements above
         event.setCancelled(true);
     }
 
