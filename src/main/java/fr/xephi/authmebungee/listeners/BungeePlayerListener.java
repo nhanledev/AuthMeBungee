@@ -104,7 +104,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     // Priority is set to lowest to keep compatibility with some chat plugins
     @EventHandler(priority = EventPriority.LOWEST)
     public void onChat(ChatEvent event) {
-        if (event.isCancelled()) {
+        if (event.isCancelled() || event.isCommand()) {
             return;
         }
 
