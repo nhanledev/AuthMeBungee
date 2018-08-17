@@ -1,6 +1,8 @@
 package fr.xephi.authmebungee.listeners;
 
 import ch.jalu.configme.SettingsManager;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import fr.xephi.authmebungee.config.BungeeConfigProperties;
 import fr.xephi.authmebungee.config.SettingsDependent;
 import fr.xephi.authmebungee.data.AuthPlayer;
@@ -64,7 +66,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     }
 
     @EventHandler
-    public void onPlayerLeave(PlayerDisconnectEvent event) {
+    public void onPlayerDisconnect(PlayerDisconnectEvent event) {
         // Remove player from out list
         authPlayerManager.removeAuthPlayer(event.getPlayer());
     }
@@ -103,7 +105,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
     // Priority is set to lowest to keep compatibility with some chat plugins
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onChat(ChatEvent event) {
+    public void onPlayerChat(ChatEvent event) {
         if (event.isCancelled() || event.isCommand()) {
             return;
         }
@@ -131,26 +133,32 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onServerConnect(ServerConnectEvent event) {
+    public void onPlayerConnectToServer(ServerConnectEvent event) {
         if (!isServerSwitchRequiresAuth || event.isCancelled()) {
             return;
         }
+
         ProxiedPlayer player = event.getPlayer();
+        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        boolean isAuthenticated = authPlayer != null && authPlayer.isLogged();
 
         // Only check non auth servers
-        if(authServers.contains(event.getTarget().getName())) {
-            return;
-        }
+        if (authServers.contains(event.getTarget().getName())) {
+            // If AutoLogin enabled, notify the server if this player is authenticated
+            if (isAutoLoginEnabled && isAuthenticated) {
+                ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("AuthMe");
+                out.writeUTF("bungeelogin");
+                out.writeUTF(authPlayer.getName());
+                event.getTarget().sendData("BungeeCord", out.toByteArray());
+            }
+        } else {
+            // Skip logged users
+            if (isAuthenticated) {
+                return;
+            }
 
-        // Skip logged users
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
-        if (authPlayer != null && authPlayer.isLogged()) {
-            return;
-        }
-
-        // If the player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
-        String server = event.getTarget().getName();
-        if (!authServers.contains(server.toLowerCase())) {
+            // If the player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
             event.setCancelled(true);
 
             TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);
@@ -162,33 +170,6 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             } else {
                 player.sendMessage(reasonMessage);
             }
-        }
-    }
-
-    @EventHandler
-    public void onServerSwitch(ServerSwitchEvent event) {
-        if (!isAutoLoginEnabled) {
-            return;
-        }
-
-        ProxiedPlayer player = event.getPlayer();
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
-        if (authPlayer == null || !authPlayer.isLogged()) {
-            return;
-        }
-
-        // If player is logged in and autoLogin is enabled, send login signal to the spigot side
-        try {
-            ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            DataOutputStream out = new DataOutputStream(bout);
-
-            out.writeUTF("AuthMe");
-            out.writeUTF("bungeelogin");
-            out.writeUTF(authPlayer.getName());
-
-            event.getPlayer().getServer().sendData("BungeeCord", bout.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
