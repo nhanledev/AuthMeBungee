@@ -56,6 +56,7 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
         // Read the plugin message
         ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
+        // TODO: should we read "FOWARD ALL"?
         if (!in.readUTF().equals("AuthMe")) {
             return;
         }

@@ -148,7 +148,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             if (isAutoLoginEnabled && isAuthenticated) {
                 ByteArrayDataOutput out = ByteStreams.newDataOutput();
                 out.writeUTF("AuthMe");
-                out.writeUTF("bungeelogin");
+                out.writeUTF("perform.login");
                 out.writeUTF(authPlayer.getName());
                 event.getTarget().sendData("BungeeCord", out.toByteArray());
             }
