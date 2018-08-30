@@ -57,10 +57,10 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
         ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
         // We expect only broadcast messages
-        if (!in.readUTF().equals("FORWARD") {
+        if (!in.readUTF().equals("FORWARD")) {
             return;
         }
-        if (!in.readUTF().equals("ALL") {
+        if (!in.readUTF().equals("ALL")) {
             return;
         }
         // Let's check the subchannel
