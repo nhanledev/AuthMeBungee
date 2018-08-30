@@ -19,26 +19,26 @@ import javax.inject.Inject;
 public class BungeeMessageListener implements Listener, SettingsDependent {
 
     // Services
-    private AuthPlayerManager authPlayerManager;
+    private final AuthPlayerManager authPlayerManager;
 
     // Settings
     private boolean isSendOnLogoutEnabled;
     private String sendOnLogoutTarget;
 
     @Inject
-    public BungeeMessageListener(SettingsManager settings, AuthPlayerManager authPlayerManager) {
+    public BungeeMessageListener(final SettingsManager settings, final AuthPlayerManager authPlayerManager) {
         this.authPlayerManager = authPlayerManager;
         reload(settings);
     }
 
     @Override
-    public void reload(SettingsManager settings) {
+    public void reload(final SettingsManager settings) {
         isSendOnLogoutEnabled = settings.getProperty(BungeeConfigProperties.ENABLE_SEND_ON_LOGOUT);
         sendOnLogoutTarget = settings.getProperty(BungeeConfigProperties.SEND_ON_LOGOUT_TARGET);
     }
 
     @EventHandler
-    public void onPluginMessage(PluginMessageEvent event) {
+    public void onPluginMessage(final PluginMessageEvent event) {
         if (event.isCancelled()) {
             return;
         }
@@ -54,49 +54,46 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
         }
 
         // Read the plugin message
-        ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
+        final ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
-        // We expect only broadcast messages
-        if (!in.readUTF().equals("FORWARD")) {
-            return;
-        }
-        if (!in.readUTF().equals("ALL")) {
-            return;
-        }
         // Let's check the subchannel
-        if (!in.readUTF().equals("AuthMe")) {
+        if (!in.readUTF().equals("AuthMe.v2.Broadcast")) {
             return;
         }
-        // Now that's sure, it's for us, so let's go
-        event.setCancelled(true);
+
+        // Read data byte array
+        final short dataLength = in.readShort();
+        final byte[] dataBytes = new byte[dataLength];
+        in.readFully(dataBytes);
+        final ByteArrayDataInput dataIn = ByteStreams.newDataInput(dataBytes);
 
         // For now that's the only type of message the server is able to receive
-        String type = in.readUTF();
+        final String type = dataIn.readUTF();
         switch (type) {
             case "login":
-                handleOnLogin(in);
+                handleOnLogin(dataIn);
                 break;
             case "logout":
-                handleOnLogout(in);
+                handleOnLogout(dataIn);
                 break;
         }
     }
 
-    private void handleOnLogin(ByteArrayDataInput in) {
-        String name = in.readUTF();
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
+    private void handleOnLogin(final ByteArrayDataInput in) {
+        final String name = in.readUTF();
+        final AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
         if (authPlayer != null) {
             authPlayer.setLogged(true);
         }
     }
 
-    private void handleOnLogout(ByteArrayDataInput in) {
-        String name = in.readUTF();
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
+    private void handleOnLogout(final ByteArrayDataInput in) {
+        final String name = in.readUTF();
+        final AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(name);
         if (authPlayer != null) {
             authPlayer.setLogged(false);
             if (isSendOnLogoutEnabled) {
-                ProxiedPlayer player = authPlayer.getPlayer();
+                final ProxiedPlayer player = authPlayer.getPlayer();
                 if (player != null) {
                     player.connect(ProxyServer.getInstance().getServerInfo(sendOnLogoutTarget));
                 }

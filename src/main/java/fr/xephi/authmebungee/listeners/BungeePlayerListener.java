@@ -25,7 +25,7 @@ import java.util.List;
 public class BungeePlayerListener implements Listener, SettingsDependent {
 
     // Services
-    private AuthPlayerManager authPlayerManager;
+    private final AuthPlayerManager authPlayerManager;
 
     // Settings
     private boolean isAutoLoginEnabled;
@@ -37,46 +37,46 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     private boolean chatRequiresAuth;
 
     @Inject
-    public BungeePlayerListener(SettingsManager settings, AuthPlayerManager authPlayerManager) {
+    public BungeePlayerListener(final SettingsManager settings, final AuthPlayerManager authPlayerManager) {
         this.authPlayerManager = authPlayerManager;
         reload(settings);
     }
 
     @Override
-    public void reload(SettingsManager settings) {
+    public void reload(final SettingsManager settings) {
         isAutoLoginEnabled = settings.getProperty(BungeeConfigProperties.AUTOLOGIN);
         isServerSwitchRequiresAuth = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_REQUIRES_AUTH);
         requiresAuthKickMessage = settings.getProperty(BungeeConfigProperties.SERVER_SWITCH_KICK_MESSAGE);
         authServers = new ArrayList<>();
-        for (String server : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
+        for (final String server : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
             authServers.add(server.toLowerCase());
         }
         isCommandsRequireAuth = settings.getProperty(BungeeConfigProperties.COMMANDS_REQUIRE_AUTH);
         commandWhitelist = new ArrayList<>();
-        for (String command : settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST)) {
+        for (final String command : settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST)) {
             commandWhitelist.add(command.toLowerCase());
         }
         chatRequiresAuth = settings.getProperty(BungeeConfigProperties.CHAT_REQUIRES_AUTH);
     }
 
     @EventHandler
-    public void onPlayerJoin(PostLoginEvent event) {
+    public void onPlayerJoin(final PostLoginEvent event) {
         // Register player in our list
         authPlayerManager.addAuthPlayer(event.getPlayer());
     }
 
     @EventHandler
-    public void onPlayerDisconnect(PlayerDisconnectEvent event) {
+    public void onPlayerDisconnect(final PlayerDisconnectEvent event) {
         // Remove player from out list
         authPlayerManager.removeAuthPlayer(event.getPlayer());
     }
 
-    private boolean notInAuthServer(ProxiedPlayer player) {
+    private boolean notInAuthServer(final ProxiedPlayer player) {
         return !authServers.contains(player.getServer().getInfo().getName().toLowerCase());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCommand(ChatEvent event) {
+    public void onCommand(final ChatEvent event) {
         if (event.isCancelled() || !event.isCommand() || !isCommandsRequireAuth) {
             return;
         }
@@ -85,10 +85,10 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         if (!(event.getSender() instanceof ProxiedPlayer)) {
             return;
         }
-        ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+        final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
         // filter only unauthenticated players
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        final AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
         if (authPlayer != null && authPlayer.isLogged()) {
             return;
         }
@@ -105,7 +105,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
 
     // Priority is set to lowest to keep compatibility with some chat plugins
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerChat(ChatEvent event) {
+    public void onPlayerChat(final ChatEvent event) {
         if (event.isCancelled() || event.isCommand()) {
             return;
         }
@@ -114,10 +114,10 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         if (!(event.getSender() instanceof ProxiedPlayer)) {
             return;
         }
-        ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+        final ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
         // filter only unauthenticated players
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        final AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
         if (authPlayer != null && authPlayer.isLogged()) {
             return;
         }
@@ -133,21 +133,21 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerConnectToServer(ServerConnectEvent event) {
+    public void onPlayerConnectToServer(final ServerConnectEvent event) {
         if (!isServerSwitchRequiresAuth || event.isCancelled()) {
             return;
         }
 
-        ProxiedPlayer player = event.getPlayer();
-        AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
-        boolean isAuthenticated = authPlayer != null && authPlayer.isLogged();
+        final ProxiedPlayer player = event.getPlayer();
+        final AuthPlayer authPlayer = authPlayerManager.getAuthPlayer(player);
+        final boolean isAuthenticated = authPlayer != null && authPlayer.isLogged();
 
         // Only check non auth servers
         if (authServers.contains(event.getTarget().getName())) {
             // If AutoLogin enabled, notify the server if this player is authenticated
             if (isAutoLoginEnabled && isAuthenticated) {
-                ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                out.writeUTF("AuthMe");
+                final ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                out.writeUTF("AuthMe.v2");
                 out.writeUTF("perform.login");
                 out.writeUTF(authPlayer.getName());
                 event.getTarget().sendData("BungeeCord", out.toByteArray());
@@ -161,7 +161,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
             // If the player is not logged in and serverSwitchRequiresAuth is enabled, cancel the connection
             event.setCancelled(true);
 
-            TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);
+            final TextComponent reasonMessage = new TextComponent(requiresAuthKickMessage);
             reasonMessage.setColor(ChatColor.RED);
 
             // Handle race condition on player join on a misconfigured network
