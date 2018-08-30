@@ -56,6 +56,12 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
         // Read the plugin message
         final ByteArrayDataInput in = ByteStreams.newDataInput(event.getData());
 
+        // Accept only broadcasts
+        if(!in.readUTF().equals("Forward")) {
+            return;
+        }
+        in.readUTF(); // Skip ONLINE/ALL parameter
+
         // Let's check the subchannel
         if (!in.readUTF().equals("AuthMe.v2.Broadcast")) {
             return;
