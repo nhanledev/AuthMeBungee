@@ -71,9 +71,15 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
         final String type = dataIn.readUTF();
         switch (type) {
             case "login":
+                System.err.println("Received a login plugin message!");
                 handleOnLogin(dataIn);
                 break;
             case "logout":
+                System.err.println("Received a logout plugin message!");
+                handleOnLogout(dataIn);
+                break;
+            case "unregister":
+                System.err.println("Received an unregister plugin message!");
                 handleOnLogout(dataIn);
                 break;
         }
