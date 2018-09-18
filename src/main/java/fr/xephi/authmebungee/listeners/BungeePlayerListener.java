@@ -143,7 +143,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         final boolean isAuthenticated = authPlayer != null && authPlayer.isLogged();
 
         // Only check non auth servers
-        if (authServers.contains(event.getTarget().getName())) {
+        if (authServers.contains(event.getTarget().getName().toLowerCase())) {
             // If AutoLogin enabled, notify the server if this player is authenticated
             if (isAutoLoginEnabled && isAuthenticated) {
                 final ByteArrayDataOutput out = ByteStreams.newDataOutput();
