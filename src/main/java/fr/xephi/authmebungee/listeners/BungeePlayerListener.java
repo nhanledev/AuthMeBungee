@@ -75,7 +75,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         return !authServers.contains(player.getServer().getInfo().getName().toLowerCase());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onCommand(final ChatEvent event) {
         if (event.isCancelled() || !event.isCommand() || !isCommandsRequireAuth) {
             return;
