@@ -2,10 +2,7 @@ package fr.xephi.authmebungee.config;
 
 import ch.jalu.configme.SettingsHolder;
 import ch.jalu.configme.SettingsManager;
-import ch.jalu.configme.migration.PlainMigrationService;
-import ch.jalu.configme.resource.PropertyResource;
-import ch.jalu.configme.resource.YamlFileResource;
-import fr.xephi.authmebungee.utils.FileUtils;
+import ch.jalu.configme.SettingsManagerBuilder;
 
 import javax.inject.Provider;
 import java.io.File;
@@ -32,11 +29,9 @@ public abstract class SettingsProvider implements Provider<SettingsManager> {
     @Override
     public SettingsManager get() {
         File configFile = new File(dataFolder, "config.yml");
-        if (!configFile.exists()) {
-            FileUtils.create(configFile);
-        }
-        PropertyResource resource = new YamlFileResource(configFile);
-        return new SettingsManager(resource, new PlainMigrationService(), properties);
+        return SettingsManagerBuilder.withYamlFile(configFile)
+            .useDefaultMigrationService()
+            .configurationData(properties)
+            .create();
     }
-
 }
