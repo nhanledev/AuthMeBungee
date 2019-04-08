@@ -10,7 +10,6 @@ import fr.xephi.authmebungee.config.BungeeSettingsProvider;
 import fr.xephi.authmebungee.listeners.BungeeMessageListener;
 import fr.xephi.authmebungee.listeners.BungeePlayerListener;
 import fr.xephi.authmebungee.services.AuthPlayerManager;
-import fr.xephi.authmebungee.services.ProxyService;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -25,7 +24,6 @@ public class AuthMeBungee extends Plugin {
     // Instances
     private Injector injector;
     private SettingsManager settings;
-    private ProxyService proxyService;
     private AuthPlayerManager authPlayerManager;
 
     public AuthMeBungee() {
@@ -38,7 +36,6 @@ public class AuthMeBungee extends Plugin {
 
         // Get singletons from the injector
         settings = injector.getSingleton(SettingsManager.class);
-        proxyService = injector.getSingleton(ProxyService.class);
         authPlayerManager = injector.getSingleton(AuthPlayerManager.class);
 
         // Print some config information
