@@ -7,6 +7,7 @@ import fr.xephi.authmebungee.config.BungeeConfigProperties;
 import fr.xephi.authmebungee.config.SettingsDependent;
 import fr.xephi.authmebungee.data.AuthPlayer;
 import fr.xephi.authmebungee.services.AuthPlayerManager;
+import fr.xephi.authmebungee.services.ProxyService;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -19,10 +20,12 @@ import net.md_5.bungee.event.EventPriority;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class BungeePlayerListener implements Listener, SettingsDependent {
 
     // Services
+    private final ProxyService proxyService;
     private final AuthPlayerManager authPlayerManager;
 
     // Settings
@@ -35,7 +38,8 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     private boolean chatRequiresAuth;
 
     @Inject
-    public BungeePlayerListener(final SettingsManager settings, final AuthPlayerManager authPlayerManager) {
+    public BungeePlayerListener(final SettingsManager settings, final ProxyService proxyService, final AuthPlayerManager authPlayerManager) {
+        this.proxyService = proxyService;
         this.authPlayerManager = authPlayerManager;
         reload(settings);
     }
@@ -139,12 +143,13 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         if (isAuthenticated && isAuthServer(event.getServer().getInfo())) {
             // If AutoLogin enabled, notify the server
             if (isAutoLoginEnabled) {
-                final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-                out.writeUTF("AuthMe.v2");
-                out.writeUTF("perform.login");
-                out.writeUTF(event.getPlayer().getName());
-                // Don't queue the message
-                event.getServer().getInfo().sendData("BungeeCord", out.toByteArray(), false);
+                proxyService.schedule(() -> {
+                    final ByteArrayDataOutput out = ByteStreams.newDataOutput();
+                    out.writeUTF("AuthMe.v2");
+                    out.writeUTF("perform.login");
+                    out.writeUTF(event.getPlayer().getName());
+                    event.getServer().getInfo().sendData("BungeeCord", out.toByteArray());
+                }, 250, TimeUnit.MICROSECONDS);
             }
         }
     }
