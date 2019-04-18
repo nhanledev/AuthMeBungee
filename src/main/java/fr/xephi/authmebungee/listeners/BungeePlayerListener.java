@@ -30,6 +30,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     private boolean isServerSwitchRequiresAuth;
     private String requiresAuthKickMessage;
     private List<String> authServers;
+    private boolean allServersAreAuthServers;
     private boolean isCommandsRequireAuth;
     private List<String> commandWhitelist;
     private boolean chatRequiresAuth;
@@ -49,6 +50,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
         for (final String server : settings.getProperty(BungeeConfigProperties.AUTH_SERVERS)) {
             authServers.add(server.toLowerCase());
         }
+        allServersAreAuthServers = settings.getProperty(BungeeConfigProperties.ALL_SERVERS_ARE_AUTH_SERVERS);
         isCommandsRequireAuth = settings.getProperty(BungeeConfigProperties.COMMANDS_REQUIRE_AUTH);
         commandWhitelist = new ArrayList<>();
         for (final String command : settings.getProperty(BungeeConfigProperties.COMMANDS_WHITELIST)) {
@@ -127,7 +129,7 @@ public class BungeePlayerListener implements Listener, SettingsDependent {
     }
 
     private boolean isAuthServer(ServerInfo serverInfo) {
-        return authServers.contains(serverInfo.getName().toLowerCase());
+        return allServersAreAuthServers || authServers.contains(serverInfo.getName().toLowerCase());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

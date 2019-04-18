@@ -14,6 +14,9 @@ public class BungeeConfigProperties implements SettingsHolder {
     @Comment("List of servers which required to be authenticated")
     public static final Property<List<String>> AUTH_SERVERS =
         newListProperty("authServers", "lobby");
+    @Comment("Consider every server as an auth server")
+    public static final Property<Boolean> ALL_SERVERS_ARE_AUTH_SERVERS =
+        newProperty("allServersAreAuthServers", false);
     @Comment("Allows or not commands to be performed if user is not logged in")
     public static final Property<Boolean> COMMANDS_REQUIRE_AUTH =
         newProperty("commands.requireAuth", true);
