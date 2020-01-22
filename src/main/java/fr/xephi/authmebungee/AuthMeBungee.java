@@ -57,7 +57,7 @@ public class AuthMeBungee extends Plugin {
         getProxy().getPluginManager().registerListener(this, injector.getSingleton(BungeePlayerListener.class));
 
         // Send metrics data
-        new Metrics(this);
+        new Metrics(this, 1880);
     }
 
     private void setupInjector() {
