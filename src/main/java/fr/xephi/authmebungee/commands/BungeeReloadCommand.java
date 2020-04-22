@@ -1,6 +1,8 @@
 package fr.xephi.authmebungee.commands;
 
 import ch.jalu.configme.SettingsManager;
+import ch.jalu.injector.factory.SingletonStore;
+import fr.xephi.authmebungee.config.SettingsDependent;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -11,19 +13,21 @@ import javax.inject.Inject;
 public class BungeeReloadCommand extends Command {
 
     private SettingsManager settings;
+    private SingletonStore<SettingsDependent> settingsDependentStore;
 
     @Inject
-    public BungeeReloadCommand(SettingsManager settings) {
+    public BungeeReloadCommand(SettingsManager settings, SingletonStore<SettingsDependent> settingsDependentStore) {
         super("abreloadproxy", "authmebungee.reload");
         this.settings = settings;
+        this.settingsDependentStore = settingsDependentStore;
     }
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
         settings.reload();
+        settingsDependentStore.retrieveAllOfType().forEach(settingsDependent -> settingsDependent.reload(settings));
         commandSender.sendMessage(
             new ComponentBuilder("AuthMeBungee configuration reloaded!").color(ChatColor.GREEN).create()
         );
     }
-
 }
