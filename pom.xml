@@ -180,7 +180,7 @@
                         </relocation>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>fr.xephi.authmebungee</shadedPattern>
+                            <shadedPattern>fr.xephi.authmebungee.libs.org.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
