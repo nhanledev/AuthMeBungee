@@ -11,7 +11,7 @@ import static ch.jalu.configme.properties.PropertyInitializer.newProperty;
 
 public class BungeeConfigProperties implements SettingsHolder {
 
-    @Comment("List of servers which required to be authenticated")
+    @Comment("List of servers in the network where authme is installed")
     public static final Property<List<String>> AUTH_SERVERS =
         newListProperty("authServers", "lobby");
     @Comment("Consider every server as an auth server")
