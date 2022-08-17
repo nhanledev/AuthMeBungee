@@ -80,7 +80,6 @@ public class BungeeMessageListener implements Listener, SettingsDependent {
                 handleOnLogin(dataIn);
                 break;
             case "logout":
-            case "unregister":
                 handleOnLogout(dataIn);
                 break;
         }
